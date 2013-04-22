@@ -94,4 +94,4 @@ History
 
 
  .   
-..:  Copyright 2012 by Mikael Roos (me@mikaelroos.se)
+..:  Copyright 2012-2013 by Mikael Roos (me@mikaelroos.se)
