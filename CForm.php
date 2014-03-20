@@ -2,7 +2,14 @@
 /**
  * A utility class to easy creating and handling of forms
  * 
- * @package LydiaCore
+ * ToDo:
+ * t()
+ * many forms on one page (session & naming)
+ * fieldset label
+ * description on each element
+ * basic style
+ *
+ * @package CForm
  */
 class CFormElement implements ArrayAccess {
 
@@ -14,7 +21,7 @@ class CFormElement implements ArrayAccess {
   
 
   /**
-   * Constructor
+   * Constructor creating a form element.
    *
    * @param string name of the element.
    * @param array attributes to set to the element. Default is an empty array.
@@ -25,6 +32,7 @@ class CFormElement implements ArrayAccess {
     //$this['key'] = $name;
     //$this['name'] = isset($this['name']) ? $this['name'] : $name;
 
+    // Use character encoding from lydia if available, else use UTF-8
     if(is_callable('CLydia::Instance()')) {
       $this->characterEncoding = CLydia::Instance()->config['character_encoding'];
     } else {
@@ -43,27 +51,57 @@ class CFormElement implements ArrayAccess {
 
 
   /**
-   * Create a formelement from an array, factory returns the correct type. 
+   * Create a formelement from an array, factory returns the correct instance. 
    *
    * @param string name of the element.
    * @param array attributes to use when creating the element.
    * @return the instance of the form element.
    */
   public static function Create($name, $attributes) {
+    
+    // Not supported is type=image, <button>, list, output, select-optgroup
     $types = array(
+
+      // Standard HTML 4.01
       'text'              => 'CFormElementText',
-      'textarea'          => 'CFormElementTextArea',
+      'file'              => 'CFormElementFile',
       'password'          => 'CFormElementPassword',
       'hidden'            => 'CFormElementHidden',
+      'textarea'          => 'CFormElementTextArea',
+      'radio'             => 'CFormElementRadio',
       'checkbox'          => 'CFormElementCheckbox',
-      'checkbox-multiple' => 'CFormElementCheckboxMultiple',
       'select'            => 'CFormElementSelect',
-      'search'            => 'CFormElementSearch',
+      'select-multiple'   => 'CFormElementSelectMultiple',
       'submit'            => 'CFormElementSubmit',
+      'reset'             => 'CFormElementReset',
+      'button'            => 'CFormElementButton',
+
+      // HTML5
+      'color'             => 'CFormElementColor',
+      'date'              => 'CFormElementDate',
+      'number'            => 'CFormElementNumber',
+      //'progress'          => 'CFormElementProgress',
+      //'meter'             => 'CFormElementMeter',
+      'range'             => 'CFormElementRange',
+      'tel'               => 'CFormElementTel',
+      'email'             => 'CFormElementEmail',
+      'url'               => 'CFormElementUrl',
+      'search'            => 'CFormElementSearch',
+      'file-multiple'     => 'CFormElementFileMultiple',
+      'datetime'          => 'CFormElementDatetime',
+      'datetime-local'    => 'CFormElementDatetimeLocal',
+      'month'             => 'CFormElementMonth',
+      'time'              => 'CFormElementTime',
+      'week'              => 'CFormElementWeek',
+
+      // Custom
+      'search-widget'     => 'CFormElementSearchWidget',
+      'checkbox-multiple' => 'CFormElementCheckboxMultiple',
+      // Address
     );
 
+    // $attributes['type'] must contain a valid type creating an object to succeed.
     $type = isset($attributes['type']) ? $attributes['type'] : null;
-
     if($type && isset($types[$type])) {
       return new $types[$type]($name, $attributes);
     } else {
@@ -90,22 +128,36 @@ class CFormElement implements ArrayAccess {
    * @return HTML code for the element.
    */
   public function GetHTML() {
-    $id =  $this->GetElementId();
-    $class = isset($this['class']) ? "{$this['class']}" : null;
-    $validates = (isset($this['validation-pass']) && $this['validation-pass'] === false) ? ' validation-failed' : null;
-    $class = (isset($class) || isset($validates)) ? " class='{$class}{$validates}'" : null;
-    $name = " name='{$this['name']}'";
-    $label = isset($this['label']) ? ($this['label'] . (isset($this['required']) && $this['required'] ? "<span class='form-element-required'>*</span>" : null)) : null;
-    $autofocus = isset($this['autofocus']) && $this['autofocus'] ? " autofocus='autofocus'" : null;    
-    $required = isset($this['required']) && $this['required'] ? " required='required'" : null;    
-    $readonly = isset($this['readonly']) && $this['readonly'] ? " readonly='readonly'" : null;    
-    $placeholder = isset($this['placeholder']) && $this['placeholder'] ? " placeholder='{$this['placeholder']}'" : null;    
-    $checked = isset($this['checked']) && $this['checked'] ? " checked='checked'" : null;    
-    $type   = isset($this['type']) ? " type='{$this['type']}'" : null;
-    $description   = isset($this['description']) ? $this['description'] : null;
-    $onlyValue  = isset($this['value']) ? htmlentities($this['value'], ENT_QUOTES, $this->characterEncoding) : null;
-    $value  = isset($this['value']) ? " value='{$onlyValue}'" : null;
+    // Add disabled to be able to disable a form element
+    // Add maxlength
+    $id           =  $this->GetElementId();
+    $class        = isset($this['class']) ? "{$this['class']}" : null;
+    $validates    = (isset($this['validation-pass']) && $this['validation-pass'] === false) ? ' validation-failed' : null;
+    $class        = (isset($class) || isset($validates)) ? " class='{$class}{$validates}'" : null;
+    $name         = " name='{$this['name']}'";
+    $label        = isset($this['label']) ? ($this['label'] . (isset($this['required']) && $this['required'] ? "<span class='form-element-required'>*</span>" : null)) : null;
+    $autofocus    = isset($this['autofocus']) && $this['autofocus'] ? " autofocus='autofocus'" : null;    
+    $required     = isset($this['required']) && $this['required'] ? " required='required'" : null;    
+    $readonly     = isset($this['readonly']) && $this['readonly'] ? " readonly='readonly'" : null;    
+    $placeholder  = isset($this['placeholder']) && $this['placeholder'] ? " placeholder='{$this['placeholder']}'" : null;    
+    $multiple     = isset($this['multiple']) && $this['multiple'] ? " multiple" : null;    
+    $max          = isset($this['max']) ? " max='{$this['max']}'" : null;    
+    $min          = isset($this['min']) ? " min='{$this['min']}'" : null;    
+    $low          = isset($this['low']) ? " low='{$this['low']}'" : null;    
+    $high         = isset($this['high']) ? " high='{$this['high']}'" : null;    
+    $optimum      = isset($this['optimum']) ? " optimum='{$this['optimum']}'" : null;    
+    $step         = isset($this['step']) ? " step='{$this['step']}'" : null;    
+    $size         = isset($this['size']) ? " size='{$this['size']}'" : null;    
+    $text         = isset($this['text']) ? htmlentities($this['text'], ENT_QUOTES, $this->characterEncoding) : null;    
+    $checked      = isset($this['checked']) && $this['checked'] ? " checked='checked'" : null;    
+    $type         = isset($this['type']) ? " type='{$this['type']}'" : null;
+    $title        = isset($this['title']) ? " title='{$this['title']}'" : null;
+    $pattern      = isset($this['pattern']) ? " pattern='{$this['pattern']}'" : null;
+    $description  = isset($this['description']) ? $this['description'] : null;
+    $onlyValue    = isset($this['value']) ? htmlentities($this['value'], ENT_QUOTES, $this->characterEncoding) : null;
+    $value        = isset($this['value']) ? " value='{$onlyValue}'" : null;
 
+    // Gather all validation messages
     $messages = null;
     if(isset($this['validation-messages'])) {
       $message = null;
@@ -115,47 +167,102 @@ class CFormElement implements ArrayAccess {
       $messages = "<ul class='validation-message'>\n{$message}</ul>\n";
     }
     
-    if($this['type'] == 'submit') {
-      return "<span><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly} /></span>\n";
+    // type=submit || reset || button
+    if(in_array($this['type'], array('submit', 'reset', 'button'))) {
+      return "<span><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$title} /></span>\n";
     } 
-    else if($this['type'] == 'search') {
+
+    // custom search-widget with type=search and type=submit
+    else if($this['type'] == 'search-widget') {
       $label = isset($this['label']) ? " value='{$this['label']}'" : null;
       $classSubmit = isset($this['class-submit']) ? " class='{$this['class-submit']}'" : null;
-      return "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}/><input id='do-{$id}' type='submit'{$classSubmit}{$label}{$readonly}/></p>\n";        
+      return "<p><input id='$id' type='search'{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}/><input id='do-{$id}' type='submit'{$classSubmit}{$label}{$readonly}{$title}/></p><p class='cf-desc'>{$description}</p>\n";        
     } 
+
+    /* // meter
+    else if($this['type'] == 'meter') {
+      return "<p><label for='$id'>$label</label><br/>\n<meter id='$id'{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}{$title}{$min}{$max}{$low}{$high}{$optimum}>{$onlyValue}</meter></p><p class='cf-desc'>{$description}</p>\n"; 
+    } 
+
+    // progress
+    else if($this['type'] == 'progress') {
+      return "<p><label for='$id'>$label</label><br/>\n<progress id='$id'{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}{$title}{$max}>{$onlyValue}</progress></p><p class='cf-desc'>{$description}</p>\n"; 
+    } */
+
+    // textarea
     else if($this['type'] == 'textarea') {
-      return "<p><label for='$id'>$label</label><br/>\n<textarea id='$id'{$type}{$class}{$name}{$autofocus}{$required}{$readonly}{$placeholder}>{$onlyValue}</textarea></p>\n"; 
+      return "<p><label for='$id'>$label</label><br/>\n<textarea id='$id'{$type}{$class}{$name}{$autofocus}{$required}{$readonly}{$placeholder}{$title}>{$onlyValue}</textarea></p><p class='cf-desc'>{$description}</p>\n"; 
     } 
+
+    // type=hidden
     else if($this['type'] == 'hidden') {
       return "<input id='$id'{$type}{$class}{$name}{$value} />\n"; 
     } 
+
+    // checkbox
     else if($this['type'] == 'checkbox') {
-      return "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$checked} /><label for='$id'>$label</label>{$messages}</p>\n"; 
+      return "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$checked}{$title} /><label for='$id'>$label</label>{$messages}</p><p class='cf-desc'>{$description}</p>\n"; 
     } 
+
+    // radio
+    else if($this['type'] == 'radio') {
+      $ret = null;
+      foreach($this['values'] as $val) {
+        $id .= $val;
+        $item = $onlyValue  = htmlentities($val, ENT_QUOTES, $this->characterEncoding);
+        $value = " value='{$onlyValue}'";
+        $checked = isset($this['checked']) && $val === $this['checked'] ? " checked='checked'" : null;    
+        $ret .= "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$checked}{$title} /><label for='$id'>$item</label>{$messages}</p>\n"; 
+      }
+      return "<div><p class='cf-label'>{$label}</p>{$ret}<p class='cf-desc'>{$description}</p></div>";
+    } 
+
+    // custom for checkbox-multiple
     else if($this['type'] == 'checkbox-multiple') {
       $type = "type='checkbox'";
       $name = " name='{$this['name']}[]'";
       $ret = null;
       foreach($this['values'] as $val) {
         $id .= $val;
-        $label = $onlyValue  = htmlentities($val, ENT_QUOTES, $this->characterEncoding);
+        $item = $onlyValue  = htmlentities($val, ENT_QUOTES, $this->characterEncoding);
         $value = " value='{$onlyValue}'";
         $checked = is_array($this['checked']) && in_array($val, $this['checked']) ? " checked='checked'" : null;    
-        $ret .= "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$checked} /><label for='$id'>$label</label>{$messages}</p>\n"; 
+        $ret .= "<p><input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$checked}{$title} /><label for='$id'>$item</label>{$messages}</p>\n"; 
       }
-      return "<div><p>{$description}</p>{$ret}</div>";
+      return "<div><p>{$label}</p>{$ret}<p class='cf-desc'>{$description}</p></div>";
     } 
+
+    // select
     else if($this['type'] == 'select') {
       $options = null;
       foreach($this['options'] as $optValue => $optText) {
         $options .= "<option value='{$optValue}'" . (($this['value'] == $optValue) ? " selected" : null) . ">{$optText}</option>\n";
       }
-      return "<p><label for='$id'>$label</label><br/>\n<select id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}>\n{$options}</select>{$messages}</p>\n"; 
+      return "<p><label for='$id'>$label</label><br/>\n<select id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>\n{$options}</select>{$messages}</p><p class='cf-desc'>{$description}</p>\n"; 
+    }
+
+    // select-multiple
+    else if($this['type'] == 'select-multiple') {
+      $name = " name='{$this['name']}[]'";
+      $options = null;
+      foreach($this['options'] as $optValue => $optText) {
+        $selected = is_array($this['values']) && in_array($optValue, $this['values']) ? " selected" : null;    
+        $options .= "<option value='{$optValue}'{$selected}>{$optText}</option>\n";
+      }
+      return "<p><label for='$id'>$label</label><br/>\n<select id='$id' multiple{$size}{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>\n{$options}</select>{$messages}</p><p class='cf-desc'>{$description}</p>\n"; 
+    }
+
+    // file-multiple
+    else if($this['type'] == 'file-multiple') {
+      return "<p><label for='$id'>$label</label><br/>\n<input id='$id' type='file' multiple{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}{$title}{$multiple}{$pattern}{$max}{$min}{$step}/>{$messages}</p><p class='cf-desc'>{$description}</p>\n";        
     } 
+
+   // Everything else 
     else {
-      return "<p><label for='$id'>$label</label><br/>\n<input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}/>{$messages}</p>\n";        
+      return "<p><label for='$id'>$label</label><br/>\n<input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$required}{$readonly}{$placeholder}{$title}{$multiple}{$pattern}{$max}{$min}{$step}/>{$messages}</p><p class='cf-desc'>{$description}</p>\n";        
     }
   }
+
 
 
   /**
@@ -178,6 +285,9 @@ class CFormElement implements ArrayAccess {
       'must_accept' => array('message' => 'You must accept this.', 'test' => 'return $checked;'),
       'custom_test' => true,
     );
+
+    // max tecken, min tecken, datum, tid, datetime, mysql datetime
+
 
     $pass = true;
     $messages = array();
@@ -212,10 +322,12 @@ class CFormElement implements ArrayAccess {
 
   /**
    * Use the element name as label if label is not set.
+   *
+   * @param string $append a colon as default to the end of the label.
    */
-  public function UseNameAsDefaultLabel() {
+  public function UseNameAsDefaultLabel($append=':') {
     if(!isset($this['label'])) {
-      $this['label'] = ucfirst(strtolower(str_replace(array('-','_'), ' ', $this['name']))).':';
+      $this['label'] = ucfirst(strtolower(str_replace(array('-','_'), ' ', $this['name']))).$append;
     }
   }
 
@@ -239,6 +351,7 @@ class CFormElement implements ArrayAccess {
   public function GetValue() {
     return $this['value'];
   }
+
 
 
   /**
@@ -269,6 +382,293 @@ class CFormElementText extends CFormElement {
 }
 
 
+
+class CFormElementColor extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'color';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementDate extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'date';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementDatetime extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'datetime';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementDatetimeLocal extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'datetime-local';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementMonth extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'month';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementTime extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'time';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementWeek extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'week';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementNumber extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'number';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+//class CFormElementProgress extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+ /* public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'progress';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementMeter extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  /*public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'meter';
+    $this->UseNameAsDefaultLabel();
+  }
+}*/
+
+
+
+class CFormElementRange extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'range';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementSearch extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type']     = 'search';
+  }
+}
+
+
+
+class CFormElementSearchWidget extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type']     = 'search-widget';
+  }
+}
+
+
+
+class CFormElementTel extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'tel';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementEmail extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'email';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementUrl extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'url';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementFile extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'file';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
+class CFormElementFileMultiple extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'file-multiple';
+    $this->UseNameAsDefaultLabel();
+  }
+}
+
+
+
 class CFormElementTextarea extends CFormElement {
   /**
    * Constructor
@@ -284,6 +684,7 @@ class CFormElementTextarea extends CFormElement {
 }
 
 
+
 class CFormElementHidden extends CFormElement {
   /**
    * Constructor
@@ -296,6 +697,7 @@ class CFormElementHidden extends CFormElement {
     $this['type'] = 'hidden';
   }
 }
+
 
 
 class CFormElementPassword extends CFormElement {
@@ -313,6 +715,24 @@ class CFormElementPassword extends CFormElement {
 }
 
 
+
+class CFormElementRadio extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type']     = 'radio';
+    //$this['checked']  = isset($attributes['checked']) ? $attributes['checked'] : false;
+    //$this['value']    = isset($attributes['value']) ? $attributes['value'] : $name;
+  }
+}
+
+
+
 class CFormElementCheckbox extends CFormElement {
   /**
    * Constructor
@@ -325,8 +745,10 @@ class CFormElementCheckbox extends CFormElement {
     $this['type']     = 'checkbox';
     $this['checked']  = isset($attributes['checked']) ? $attributes['checked'] : false;
     $this['value']    = isset($attributes['value']) ? $attributes['value'] : $name;
+    $this->UseNameAsDefaultLabel(null);
   }
 }
+
 
 
 class CFormElementCheckboxMultiple extends CFormElement {
@@ -341,6 +763,7 @@ class CFormElementCheckboxMultiple extends CFormElement {
     $this['type'] = 'checkbox-multiple';
   }
 }
+
 
 
 class CFormElementSelect extends CFormElement {
@@ -358,7 +781,8 @@ class CFormElementSelect extends CFormElement {
 }
 
 
-class CFormElementSearch extends CFormElement {
+
+class CFormElementSelectMultiple extends CFormElement {
   /**
    * Constructor
    *
@@ -367,9 +791,11 @@ class CFormElementSearch extends CFormElement {
    */
   public function __construct($name, $attributes=array()) {
     parent::__construct($name, $attributes);
-    $this['type']     = 'search';
+    $this['type']     = 'select-multiple';
+    $this->UseNameAsDefaultLabel();
   }
 }
+
 
 
 class CFormElementSubmit extends CFormElement {
@@ -385,6 +811,39 @@ class CFormElementSubmit extends CFormElement {
     $this->UseNameAsDefaultValue();
   }
 }
+
+
+
+class CFormElementReset extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'reset';
+    $this->UseNameAsDefaultValue();
+  }
+}
+
+
+
+class CFormElementButton extends CFormElement {
+  /**
+   * Constructor
+   *
+   * @param string name of the element.
+   * @param array attributes to set to the element. Default is an empty array.
+   */
+  public function __construct($name, $attributes=array()) {
+    parent::__construct($name, $attributes);
+    $this['type'] = 'button';
+    $this->UseNameAsDefaultValue();
+  }
+}
+
 
 
 class CForm implements ArrayAccess {
@@ -499,6 +958,7 @@ class CForm implements ArrayAccess {
       'columns'        => 1,      // Layout all elements in one column
       'use_buttonbar'  => true,   // Layout consequtive buttons as one element wrapped in <p>
       'use_fieldset'   => true,   // Wrap form fields within <fieldset>
+      'legend'         => isset($this->form['legend']) ? $this->form['legend'] : null,   // Use legend for fieldset
     );
     $options = array_merge($defaults, $options);
 
@@ -514,9 +974,14 @@ class CForm implements ArrayAccess {
     }
     
     $fieldsetStart  = '<fieldset>';
+    $legend         = null;
     $fieldsetEnd    = '</fieldset>';
     if(!$options['use_fieldset']) {
       $fieldsetStart = $fieldsetEnd = null;
+    }
+
+    if($options['use_fieldset'] && $options['legend']) {
+      $legend = "<legend>{$options['legend']}</legend>";
     }
     
     $elementsArray  = $this->GetHTMLForElements($options);
@@ -525,6 +990,7 @@ class CForm implements ArrayAccess {
     $html = <<< EOD
 \n<form{$id}{$class}{$name}{$action}{$method}>
 {$fieldsetStart}
+{$legend}
 {$elements}
 {$output}
 {$fieldsetEnd}
@@ -551,12 +1017,12 @@ EOD;
     while(list($key, $element) = each($this->elements)) {
       
       // Create a buttonbar?
-      if($element['type'] == 'submit' && $options['use_buttonbar']) {
+      if(in_array($element['type'], array('submit', 'reset', 'button')) && $options['use_buttonbar']) {
         $name = 'buttonbar';
         $html = "<p class='buttonbar'>\n" . $element->GetHTML() . '&nbsp;';
         // Get all following submits (and buttons)
         while(list($key, $element) = each($this->elements)) {
-          if($element['type'] == 'submit') {
+          if(in_array($element['type'], array('submit', 'reset', 'button'))) {
             $html .= $element->GetHTML();
           } else {
             prev($this->elements);
@@ -669,7 +1135,7 @@ EOD;
     // First clear all
     foreach($this->elements as $key => $val) {
       // Do not reset value for buttons
-      if($this[$key]['type'] == 'submit') {
+      if(in_array($this[$key]['type'], array('submit', 'reset', 'button'))) {
         continue;
       }
 
@@ -688,6 +1154,7 @@ EOD;
       // Take care of arrays as values (multiple-checkbox)
       if(isset($val['values'])) {
         $this[$key]['checked'] = $val['values'];
+        //$this[$key]['values']  = $val['values'];
       } else {
         $this[$key]['value'] = $val['value'];
       }
@@ -695,6 +1162,11 @@ EOD;
       // Is this a checkbox?
       if($this[$key]['type'] === 'checkbox') {
         $this[$key]['checked'] = true;
+      }
+
+      // Is this a radio?
+      else if($this[$key]['type'] === 'radio') {
+        $this[$key]['checked'] = $val['value'];
       }
 
       // Keep track on validation messages if set
@@ -731,13 +1203,6 @@ EOD;
     $request = null;
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
       $request = $_POST;
-    /*} else if($_SERVER['REQUEST_METHOD'] == 'GET' && ) {
-      echo "GET";
-      echo $_SERVER['QUERY_STRING'];
-      $request = $_GET;
-    }
-
-    if($request) {*/
       unset($_SESSION['form-failed']);
       $validates = true;
 
@@ -758,6 +1223,12 @@ EOD;
             $element['checked'] = true;
           }
 
+          // If the element is a radio, set the value to checked.
+          if($element['type'] === 'radio') {
+            $element['checked'] = $element['value'];
+          }
+
+          // Do validation of form element
           if(isset($element['validation'])) {
             $element['validation-pass'] = $element->Validate($element['validation'], $this);
             if($element['validation-pass'] === false) {
@@ -772,7 +1243,7 @@ EOD;
             $remember = true;
           }
 
-          // Carry out the callback if the form validates
+          // Carry out the callback if the form element validates
           if(isset($element['callback']) && $validates) {
             if(isset($element['callback-args'])) {
               $callbackStatus = call_user_func_array($element['callback'], array_merge(array($this), $element['callback-args']));
@@ -787,6 +1258,8 @@ EOD;
 
           // Set element to null, then we know it was not set.
           //$element['value'] = null;
+
+          //echo $element['type'] . ':' . $element['name'] . ':' . $element['value'] . '<br>';
 
           // If the element is a checkbox, clear its value of checked.
           if($element['type'] === 'checkbox' || $element['type'] === 'checkbox-multiple') {
@@ -808,13 +1281,6 @@ EOD;
     // Read form data from session if the previous post failed during validation.
     elseif(isset($_SESSION['form-failed'])) {
       $this->InitElements($_SESSION['form-failed']);
-      /*foreach($_SESSION['form-failed'] as $key => $val) {
-        $this[$key]['value'] = $val['value'];
-        if(isset($val['validation-messages'])) {
-          $this[$key]['validation-messages'] = $val['validation-messages'];
-          $this[$key]['validation-pass'] = false;
-        }
-      }*/
       unset($_SESSION['form-failed']);
     } 
 
