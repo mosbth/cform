@@ -1,0 +1,22 @@
+{
+    "name": "mos/htmlform",    
+    "type": "library",
+    "description": "Classes for HTML Forms",
+    "keywords": ["html", "forms", "education"],
+    "homepage": "http://dbwebb.se/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikael Roos",
+            "email": "me@mikaelroos.se",
+            "homepage": "http://mikaelroos.se",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": { "Mos\\": "src/" }
+    }
+}

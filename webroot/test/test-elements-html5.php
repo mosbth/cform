@@ -59,24 +59,6 @@ $form = new \Mos\HTMLForm\CForm(array('legend' => 'Legend'), array(
       'max'         => 100,
       'step'        => 2,
     ),
-/*    'progress' => array(
-      'type'        => 'progress',
-      'description' => 'Here you can place a description.',
-      'placeholder' => 'Here is a placeholder',
-      'value'       => 42,
-      'max'         => 100,
-    ),
-    'meter' => array(
-      'type'        => 'meter',
-      'description' => 'Here you can place a description.',
-      'placeholder' => 'Here is a placeholder',
-      'value'       => 42,
-      'min'         => 0,
-      'max'         => 100,
-      'low'         => 10,
-      'high'        => 90,
-      'optimum'     => 50,
-    ),*/
     'search' => array(
       'type'        => 'search',
       'label'       => 'Search:',
