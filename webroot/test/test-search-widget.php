@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 
 // -----------------------------------------------------------------------
@@ -9,33 +9,14 @@ include('../CForm.php');
 //
 session_name('cform_example');
 session_start();
-$form = new CForm(array('legend' => 'Legend'), array(
+$form = new \Mos\HTMLForm\CForm(array('legend' => 'Legend'), array(
     'search-widget' => array(
       'type'        => 'search-widget',
       'description' => 'Here you can place a description.',
       'placeholder' => 'Here is a placeholder',
+      'label'       => 'Search',
       'callback'  => function($form) {
         $form->AddOutput("<p><i>DoSubmit(): Search-widget was submitted.</i></p>");
-        $form->AddOutput("<p><pre>" . print_r($_POST, 1) . "</pre></p>");
-        $form->saveInSession = true;
-        return true;
-      }
-    ),
-    'checkbox-multiple' => array(
-      'type'        => 'checkbox-multiple',
-      'label'       => 'checkbox-multiple:',
-      'description' => 'Here you can place a description.',
-      'placeholder' => 'Here is a placeholder',
-      'values'      => array('tomato', 'potato', 'apple', 'pear', 'banana'),
-      'checked'     => array('potato', 'pear'),
-   ),
-    'reset' => array(
-      'type'      => 'reset',
-    ),
-    'submit' => array(
-      'type'      => 'submit',
-      'callback'  => function($form) {
-        $form->AddOutput("<p><i>DoSubmit(): Form was submitted. Do stuff (save to database) and return true (success) or false (failed processing form)</i></p>");
         $form->AddOutput("<p><pre>" . print_r($_POST, 1) . "</pre></p>");
         $form->saveInSession = true;
         return true;
@@ -69,4 +50,4 @@ else if($status === false){
 <h1>CForm Example: New form elements in HTML 5</h1>
 <?=$form->GetHTML()?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

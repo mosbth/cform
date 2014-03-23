@@ -8,10 +8,11 @@ There is an article written on CForm, in swedish though.
 By Mikael Roos (me@mikaelroos.se)
 
 
+
 License
 ----------------------------------
 
-This software has dual license, MIT LICENSE and GPL VERSION 3.
+This software is free software and carries a MIT license.
 
 
 
@@ -64,34 +65,49 @@ Todo
 * Check that the form is valid by storing key in session and hidden field and match those.
 
 
+
 History
 ----------------------------------
 
-2013-04-22 v0.9.0
+v0.1.x (latest)
+
+* Branched to v2 to develop version 2 of CForm.
+
+
+v0.9.0 (2013-04-22)
+
 * First tag as baseline when moving CForm from Lydia to own repository.
 
+
 2012-11-26:
+
 * Added validation rule for email address `email_address`. Rewrote `CFormElement::Validate()` to accept anonomous function as validation rule.
 
+
 2012-11-14:
+
 * Added `CFormElementCheckboxMultiple`.
 * Added code example for checkbox-multiple:  
     http://dbwebb.se/kod-exempel/cform/test_checkbox_multiple.php
     http://dbwebb.se/kod-exempel/cform/test_checkbox1.php (same example but not true multiple choice)
 
+
 2012-11-13:
+
 * Added `CFormElementCheckbox` and validation rule `must_accept`.
 * Added code example for checkboxes:  
     http://dbwebb.se/kod-exempel/cform/test_checkbox.php
 
 
 2012-10-05: 
+
 * Updated this readme-file and reworked the tutorial at  
   http://dbwebb.se/kunskap/anvand-lydias-formularklass-cform-for-formularhantering
-
 * Updated the code-example at:  
   http://dbwebb.se/kod-exempel/cform/
 
 
+```
  .   
-..:  Copyright 2012-2013 by Mikael Roos (me@mikaelroos.se)
+..:  Copyright 2012-2014 by Mikael Roos (me@mikaelroos.se)
+```

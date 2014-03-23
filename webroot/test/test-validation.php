@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 /*
     $tests = array(
@@ -55,7 +55,7 @@ if(!empty($_POST['tests'])) {
   }
 }
 
-$form = new CForm(array(), array(
+$form = new \Mos\HTMLForm\CForm(array(), array(
     'enter-a-value' => array(
       'type'        => 'text',
     ),        
@@ -110,4 +110,4 @@ else if($status === false){
 <h1>CForm Example: Try validation methods</h1>
 <?=$form->GetHTML()?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

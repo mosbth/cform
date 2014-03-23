@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 
 /**
@@ -57,7 +57,7 @@ include('../CForm.php');
 //
 session_name('cform_example');
 session_start();
-$form = new CForm(array(), array(
+$form = new \Mos\HTMLForm\CForm(array(), array(
     'name' => array(
       'type'        => 'text',
       'label'       => 'Name of contact person:',
@@ -120,4 +120,4 @@ else if($status === false){
 <h1>CForm Example: How to create CForm using array</h1>
 <?=$form->GetHTML()?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

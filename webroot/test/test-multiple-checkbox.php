@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 /*
     $items = Array('tomato', 'potato', 'apple', 'pear', 'banana');
@@ -16,7 +16,7 @@ include('../CForm.php');
 //
 session_name('cform_example');
 session_start();
-$form = new CForm(array(), array(
+$form = new \Mos\HTMLForm\CForm(array(), array(
     'items' => array(
       'type'        => 'checkbox-multiple',
       'values'      => array('tomato', 'potato', 'apple', 'pear', 'banana'),
@@ -65,4 +65,4 @@ else if($status === false){
 <h1>CForm Example: Using multiple checkboxes</h1>
 <?=$form->GetHTML()?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

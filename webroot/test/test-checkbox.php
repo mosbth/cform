@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 /*
     $this->AddElement(new CFormElementCheckbox('accept_mail', array('label'=>'It´s great if you send me product information by mail.', 'checked'=>false)))
@@ -16,7 +16,7 @@ include('../CForm.php');
 //
 session_name('cform_example');
 session_start();
-$form = new CForm(array(), array(
+$form = new \Mos\HTMLForm\CForm(array(), array(
     'accept_mail' => array(
       'type'        => 'checkbox',
       'label'       => 'It´s great if you send me product information by mail.',
@@ -76,4 +76,4 @@ else if($status === false){
 <h1>CForm Example: Using checkboxes</h1>
 <?=$form->GetHTML()?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

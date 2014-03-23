@@ -1,12 +1,12 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 
 /**
  * Create a class for a contact-form with name, email and phonenumber.
  */
-class CFormContact extends CForm {
+class CFormContact extends \Mos\HTMLForm\CForm {
 
 
   /** Create all form elements and validation rules in the constructor.
@@ -15,10 +15,10 @@ class CFormContact extends CForm {
   public function __construct() {
     parent::__construct();
     
-    $this->AddElement(new CFormElementText('name'))
-         ->AddElement(new CFormElementText('email'))
-         ->AddElement(new CFormElementText('phone'))
-         ->AddElement(new CFormElementSubmit('submit', array('callback'=>array($this, 'DoSubmit'))));
+    $this->AddElement(new \Mos\HTMLForm\CFormElementText('name'))
+         ->AddElement(new \Mos\HTMLForm\CFormElementText('email'))
+         ->AddElement(new \Mos\HTMLForm\CFormElementText('phone'))
+         ->AddElement(new \Mos\HTMLForm\CFormElementSubmit('submit', array('callback'=>array($this, 'DoSubmit'))));
   }
 
 
@@ -61,4 +61,4 @@ if($status === true) {
 
 <p><code>$_POST</code> <?php if(empty($_POST)) {echo '<i>is empty.</i>';} else {echo '<i>contains:</i><pre>' . print_r($_POST, 1) . '</pre>';} ?></p>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

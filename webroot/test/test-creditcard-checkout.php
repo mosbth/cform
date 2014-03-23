@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 // Adapted from Java code at http://www.merriampark.com/anatomycc.htm
 // by Andy Frey, onesandzeros.biz
@@ -177,7 +177,7 @@ $elements = array(
   ),
 );
 
-$form = new CForm(array(), $elements);
+$form = new \Mos\HTMLForm\CForm(array(), $elements);
 
 // Check the status of the form
 $status = $form->Check();
@@ -211,4 +211,4 @@ $columns = isset($_GET['cols']) && $_GET['cols'] == 2 ? 2 : 1;
 <p>View this form in a <a href='?cols=2'>two-column layout</a> or in a <a href='?'>standard layout</a>.</p>
 <?=$form->GetHTML(array('columns' => $columns))?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 
 // -----------------------------------------------------------------------
@@ -9,7 +9,7 @@ include('../CForm.php');
 //
 session_name('cform_example');
 session_start();
-$form = new CForm(array('legend' => 'Legend'), array(
+$form = new \Mos\HTMLForm\CForm(array('legend' => 'Legend'), array(
     'color' => array(
       'type'        => 'color',
       'description' => 'Here you can place a description.',
@@ -142,4 +142,4 @@ else if($status === false){
 <h1>CForm Example: New form elements in HTML 5</h1>
 <?=$form->GetHTML()?>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>

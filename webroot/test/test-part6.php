@@ -1,12 +1,12 @@
 <?php
 // Include CForm
-include('../CForm.php');
+include('../../autoloader.php');
 
 
 /**
  * Create a class for a contact-form with name, email and phonenumber.
  */
-class CFormContact extends CForm {
+class CFormContact extends \Mos\HTMLForm\CForm {
 
 
   /** Create all form elements and validation rules in the constructor.
@@ -15,11 +15,11 @@ class CFormContact extends CForm {
   public function __construct() {
     parent::__construct();
     
-    $this->AddElement(new CFormElementText('name', array('label'=>'Name of contact person:', 'required'=>true)))
-         ->AddElement(new CFormElementText('email', array('required'=>true)))
-         ->AddElement(new CFormElementText('phone', array('required'=>true)))
-         ->AddElement(new CFormElementSubmit('submit', array('callback'=>array($this, 'DoSubmit'))))
-         ->AddElement(new CFormElementSubmit('submit-fail', array('callback'=>array($this, 'DoSubmitFail'))));
+    $this->AddElement(new \Mos\HTMLForm\CFormElementText('name', array('label'=>'Name of contact person:', 'required'=>true)))
+         ->AddElement(new \Mos\HTMLForm\CFormElementText('email', array('required'=>true)))
+         ->AddElement(new \Mos\HTMLForm\CFormElementText('phone', array('required'=>true)))
+         ->AddElement(new \Mos\HTMLForm\CFormElementSubmit('submit', array('callback'=>array($this, 'DoSubmit'))))
+         ->AddElement(new \Mos\HTMLForm\CFormElementSubmit('submit-fail', array('callback'=>array($this, 'DoSubmitFail'))));
          
     $this->SetValidation('name', array('not_empty'))
          ->SetValidation('email', array('not_empty', 'email_adress'))
@@ -87,4 +87,4 @@ else if($status === false){
 
 <p><code>$_POST</code> <?php if(empty($_POST)) {echo '<i>is empty.</i>';} else {echo '<i>contains:</i><pre>' . print_r($_POST, 1) . '</pre>';} ?></p>
 
-<?php $footer = "../../template/footer_mos.php"; if(is_file($footer)) include($footer) ?>
+<?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>
