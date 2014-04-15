@@ -1,5 +1,5 @@
 {
-    "name": "mos/htmlform",    
+    "name": "mos/cform",    
     "type": "library",
     "description": "Classes for HTML Forms",
     "keywords": ["html", "forms", "education"],
