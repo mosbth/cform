@@ -1,7 +1,16 @@
 CForm a PHP class for creating, rendering and validating HTML forms.
 ==================================
 
-There is an article written on CForm, in swedish though. 
+[![Latest Stable Version](https://poser.pugx.org/leaphly/cart-bundle/version.png)](https://packagist.org/packages/mos/cform)
+[![Build Status](https://travis-ci.org/mosbth/cform.png?branch=v2)](https://travis-ci.org/mosbth/cform)
+[![Coverage Status](https://coveralls.io/repos/mosbth/cform/badge.png)](https://coveralls.io/r/mosbth/cform)
+[![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?s=f999ab1961684a91050b095682f7ab7a13ccb534)](https://scrutinizer-ci.com/g/mosbth/cform/)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?s=1c2fc1af0df7fb7ee1e4f379a81253583a750297)](https://scrutinizer-ci.com/g/mosbth/cform/)
+
+Read about `CForm` here:
+* http://dbwebb.se/opensource/cimage 
+
+There is an article written on CForm, in swedish. 
 * http://dbwebb.se/kunskap/cform-en-php-klass-for-att-skapa-presentera-och-validera-html-formular
 
 
@@ -13,41 +22,6 @@ License
 ----------------------------------
 
 This software is free software and carries a MIT license.
-
-
-
-Form elements
-----------------------------------
-
-The class `CForm` uses `CFormElements`.
-
-The following form elements are supported:
-
-    class CFormElementText extends CFormElement {
-    class CFormElementTextarea extends CFormElement {
-    class CFormElementHidden extends CFormElement {
-    class CFormElementPassword extends CFormElement {
-    class CFormElementCheckbox extends CFormElement {
-    class CFormElementCheckboxMultiple extends CFormElement {
-    class CFormElementSubmit extends CFormElement {
-
-
-
-Validation rules
-----------------------------------
-
-The following validation rules are supported:
-
-    'fail' => array('message' => 'Will always fail.', 'test' => 'return false;'),
-    'pass' => array('message' => 'Will always pass.', 'test' => 'return true;'),
-    'not_empty' => array('message' => 'Can not be empty.', 'test' => 'return $value != "";'),
-    'numeric' => array('message' => 'Must be numeric.', 'test' => 'return is_numeric($value);'),
-    'mail_address' => array('message' => 'Must be an emailaddress.', 'test' => function($value) { return preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i', $value) === 1; } ),
-    'match' => array('message' => 'The field does not match.', 'test' => 'return $value == $form[$arg]["value"] ;'),
-    'must_accept' => array('message' => 'You must accept this.', 'test' => 'return isset($value);'),
-
-The validation rule for 'match' is useful when changing password and one field should match another field in the form.
-The validation rule for 'must_accept' is useful when the user must accept a license agreement by clicking a checkbox.
 
 
 
@@ -63,15 +37,23 @@ Todo
 * Integrate/support with client side validation through js/ajax.
 * Support saving partial data of form through js/ajax.
 * Check that the form is valid by storing key in session and hidden field and match those.
-
+* Unittest
+* Several forms on the same page.
+* Integrate with Travis & Scrutinizr.
 
 
 History
 ----------------------------------
 
-v0.1.x (latest)
+v1.9.0 (2014-04-17)
 
 * Branched to v2 to develop version 2 of CForm.
+* Using namespace `Mos\HTMLForm`.
+* Published as package on Packagist.
+* Introduced composer.json.
+* Codestandard according to PSR-1 & PSR-2.
+* Adding testprogram for HTML5 form elements
+* Adding a complete set of HTML5 forms.
 
 
 v0.9.0 (2013-04-22)

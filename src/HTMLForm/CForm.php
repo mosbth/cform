@@ -26,13 +26,7 @@ class CForm implements \ArrayAccess
      */
     public function __construct($form = [], $elements = [])
     {
-        $this->form = $form;
-        if (!empty($elements)) {
-            foreach ($elements as $key => $element) {
-                $this->elements[$key] = CFormElement::Create($key, $element);
-            }
-        }
-        $this->output = array();
+        $this->create($form, $elements);
     }
 
 
@@ -44,6 +38,30 @@ class CForm implements \ArrayAccess
     public function offsetExists($offset) { return isset($this->elements[$offset]); }
     public function offsetUnset($offset) { unset($this->elements[$offset]); }
     public function offsetGet($offset) { return isset($this->elements[$offset]) ? $this->elements[$offset] : null; }
+
+
+
+    /**
+     * Add a form element
+     *
+     * @param array $form     details for the form
+     * @param array $elements all the elements
+     *
+     * @return $this CForm
+     */
+    public function create($form = [], $elements = [])
+    {
+        $this->form = $form;
+        if (!empty($elements)) {
+            foreach ($elements as $key => $element) {
+                $this->elements[$key] = CFormElement::Create($key, $element);
+            }
+        }
+        $this->output = [];
+
+        return $this;
+    }
+  
 
 
     /**
@@ -68,7 +86,7 @@ class CForm implements \ArrayAccess
      *
      * @return $this CForm
      */
-    public function removeElement($name) 
+    public function removeElement($name)
     {
         unset($this->elements[$name]);
         return $this;
