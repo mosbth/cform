@@ -4,8 +4,8 @@ CForm a PHP class for creating, rendering and validating HTML forms.
 [![Latest Stable Version](https://poser.pugx.org/leaphly/cart-bundle/version.png)](https://packagist.org/packages/mos/cform)
 [![Build Status](https://travis-ci.org/mosbth/cform.png?branch=v2)](https://travis-ci.org/mosbth/cform)
 [![Coverage Status](https://coveralls.io/repos/mosbth/cform/badge.png)](https://coveralls.io/r/mosbth/cform)
-[![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?s=f999ab1961684a91050b095682f7ab7a13ccb534)](https://scrutinizer-ci.com/g/mosbth/cform/)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?s=1c2fc1af0df7fb7ee1e4f379a81253583a750297)](https://scrutinizer-ci.com/g/mosbth/cform/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?s=80b5a2ad3c062bd6e8215dd655ca8badfef4a40d)](https://scrutinizer-ci.com/g/mosbth/cform/)
+[![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?s=0f195aa8f17317cc1c427f9484fa5107e4558aed)](https://scrutinizer-ci.com/g/mosbth/cform/)
 
 Read about `CForm` here:
 * http://dbwebb.se/opensource/cimage 
@@ -27,7 +27,7 @@ This software is free software and carries a MIT license.
 
 Todo
 ----------------------------------
-
+m
 * Layout form elements in grid.
 * Style form using LESS and CSS.
 * Support all form elements.
