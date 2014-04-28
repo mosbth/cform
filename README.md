@@ -45,6 +45,12 @@ Todo
 History
 ----------------------------------
 
+v1.9.x (latest)
+
+* Corrected #11 wrong namespace of Exception when validation rule does not exists.
+* Added testcase for #11 and introduced unittesting.
+
+
 v1.9.0 (2014-04-17)
 
 * Branched to v2 to develop version 2 of CForm.
