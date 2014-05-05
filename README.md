@@ -27,7 +27,7 @@ This software is free software and carries a MIT license.
 
 Todo
 ----------------------------------
-m
+
 * Layout form elements in grid.
 * Style form using LESS and CSS.
 * Support all form elements.
@@ -45,7 +45,7 @@ m
 History
 ----------------------------------
 
-v1.9.x (latest)
+v1.9.1 (2014-05-05)
 
 * Corrected #11 wrong namespace of Exception when validation rule does not exists.
 * Added testcase for #11 and introduced unittesting.
