@@ -45,6 +45,11 @@ Todo
 History
 ----------------------------------
 
+v1.9.x (latest)
+
+* Added testcases for `CHTMLElement`.
+
+
 v1.9.1 (2014-05-05)
 
 * Corrected #11 wrong namespace of Exception when validation rule does not exists.

@@ -30,8 +30,6 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
 
 
 
-
-
     /**
      * Test 
      *
@@ -46,4 +44,45 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
 
         $el->validate('no-such-rule');
     }
+
+
+
+    /**
+     * Test 
+     *
+     * @return void
+     *
+     */
+    public function testGetValue() 
+    {
+        $el = new \Mos\HTMLForm\CFormElement('test', ['value' => 42]);
+
+        $res = $el['value'];
+        $exp = 42;
+        $this->assertEquals($res, $exp, "Form element value missmatch, array syntax.");
+
+        $res = $el->getValue();
+        $exp = 42;
+        $this->assertEquals($res, $exp, "Form element value missmatch, method.");
+    }
+
+
+
+    /**
+     * Test 
+     *
+     * @return void
+     *
+     */
+    public function testValidateEmail() 
+    {
+        $el = new \Mos\HTMLForm\CFormElement('test');
+
+        $el['value'] = 'mos@dbwebb.se';
+        $res = $el->validate(['email_adress'], null);
+        $this->assertTrue($res, "Validation email fails.");
+    }
+
+
+
 }
