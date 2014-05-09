@@ -263,7 +263,7 @@ EOD;
      *
      * @return array with HTML for the formelements.
      */
-    public function getHTMLLayoutForElements($elements, $options=array()) 
+    public function getHTMLLayoutForElements($elements, $options=array())
     {
         $defaults = [
             'columns' => 1,
@@ -313,13 +313,13 @@ EOD;
      *
      * @return array with elements that failed validation.
      */
-    public function getValidationErrors() 
+    public function getValidationErrors()
     {
         $errors = [];
         foreach ($this->elements as $name => $element) {
             if ($element['validation-pass'] === false) {
                 $errors[$name] = [
-                    'id' => $element->GetElementId(), 
+                    'id' => $element->GetElementId(),
                     'label' => $element['label'], 
                     'message' => implode(' ', $element['validation-messages'])
                 ];
@@ -335,9 +335,9 @@ EOD;
      *
      * @return string/null with the complete <output> element or null if no output.
      */
-    public function getOutput() 
+    public function getOutput()
     {
-        return !empty($this->output) 
+        return !empty($this->output)
             ? "<output>{$this->output}</output>"
             : null;
     }
@@ -351,7 +351,7 @@ EOD;
      *
      * @return void
      */
-    protected function initElements($values) 
+    protected function initElements($values)
     {
         // First clear all
         foreach ($this->elements as $key => $val) {
@@ -402,10 +402,13 @@ EOD;
      * to the original form page, the form will populate from the session and should be rendered again.
      * Form elements may remember their value if 'remember' is set and true.
      *
+     * @param callable $callIfSuccess handler to call if function returns true.
+     * @param callable $callIfFail    handler to call if function returns true.
+     *
      * @return mixed, $callbackStatus if submitted&validates, false if not validate, null if not submitted. 
      *         If submitted the callback function will return the actual value which should be true or false.
      */
-    public function check() 
+    public function check($callIfSuccess = null, $callIfFail = null)
     {
         $remember = null;
         $validates = null;
@@ -454,7 +457,7 @@ EOD;
                         if ($element['validation-pass'] === false) {
                     
                             $values[$element['name']] = [
-                                'value'=>$element['value'], 
+                                'value'=>$element['value'],
                                 'validation-messages' => $element['validation-messages']
                             ];
                             $validates = false;
@@ -463,7 +466,7 @@ EOD;
                     }
 
                     // Hmmm.... Why did I need this remember thing?
-                    if (isset($element['remember']) 
+                    if (isset($element['remember'])
                         && $element['remember']
                     ) {
                         $values[$element['name']] = ['value'=>$element['value']];
@@ -471,7 +474,7 @@ EOD;
                     }
 
                     // Carry out the callback if the form element validates
-                    if (isset($element['callback']) 
+                    if (isset($element['callback'])
                         && $validates
                     ) {
                 
@@ -494,7 +497,7 @@ EOD;
                     //echo $element['type'] . ':' . $element['name'] . ':' . $element['value'] . '<br>';
 
                     // If the element is a checkbox, clear its value of checked.
-                    if ($element['type'] === 'checkbox' 
+                    if ($element['type'] === 'checkbox'
                         || $element['type'] === 'checkbox-multiple'
                     ) {
                         
@@ -530,7 +533,7 @@ EOD;
 
         } elseif (isset($_SESSION['form-save'])) {
             
-            // Read form data from session, 
+            // Read form data from session,
             // useful during test where the original form is displayed with its posted values
             $this->InitElements($_SESSION['form-save']);
             unset($_SESSION['form-save']);
@@ -539,7 +542,7 @@ EOD;
     
         // Prepare if data should be stored in the session during redirects
         // Did form validation or the callback fail?
-        if ($validates === false 
+        if ($validates === false
             || $callbackStatus === false
         ) {
 
@@ -547,7 +550,7 @@ EOD;
 
         } elseif ($remember) {
 
-            // Hmmm, why do I want to use this 
+            // Hmmm, why do I want to use this
             $_SESSION['form-remember'] = $values;
         }
     
@@ -557,8 +560,31 @@ EOD;
             $_SESSION['form-save'] = $values;
         }
 
-        return $validates
-            ? $callbackStatus 
+        // Lets se what the returnvalue should be
+        $ret = $validates
+            ? $callbackStatus
             : $validates;
+
+
+        if ($ret === true && isset($callIfSuccess)) {
+
+            // Use callback for success, if defined
+            if (is_callable($callIfSuccess)) {
+                call_user_func_array($callIfSuccess, [$this]);
+            } else {
+                throw new \Exception("CForm, success-method is not callable.");
+            }
+    
+        } elseif ($ret === false && isset($callIfSuccess)) {
+    
+            // Use callback for fail, if defined
+            if (is_callable($callIfSuccess)) {
+                call_user_func_array($callIfSuccess, [$this]);
+            } else {
+                throw new \Exception("CForm, success-method is not callable.");
+            }
+        }
+
+        return $ret;
     }
 }

@@ -48,6 +48,7 @@ History
 v1.9.x (latest)
 
 * Added testcases for `CHTMLElement`.
+* extending check()-method with callable arguments
 
 
 v1.9.1 (2014-05-05)
