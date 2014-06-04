@@ -64,7 +64,6 @@ else if($status === false){
   header("Location: " . $_SERVER['PHP_SELF']);
 }
 
-$columns = isset($_GET['cols']) && $_GET['cols'] == 2 ? 2 : 1;
 ?>
 
 
