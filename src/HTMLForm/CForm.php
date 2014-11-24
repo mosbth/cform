@@ -575,11 +575,11 @@ EOD;
                 throw new \Exception("CForm, success-method is not callable.");
             }
     
-        } elseif ($ret === false && isset($callIfSuccess)) {
+        } elseif ($ret === false && isset($callIfFail)) {
     
             // Use callback for fail, if defined
-            if (is_callable($callIfSuccess)) {
-                call_user_func_array($callIfSuccess, [$this]);
+            if (is_callable($callIfFail)) {
+                call_user_func_array($callIfFail, [$this]);
             } else {
                 throw new \Exception("CForm, success-method is not callable.");
             }
