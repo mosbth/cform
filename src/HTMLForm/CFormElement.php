@@ -238,7 +238,7 @@ class CFormElement implements \ArrayAccess
         } else if ($this['type'] == 'textarea') {
 
             // textarea
-            return "<p><label for='$id'>$label</label><br/>\n<textarea id='$id'{$type}{$class}{$name}{$autofocus}{$required}{$readonly}{$placeholder}{$title}>{$onlyValue}</textarea></p><p class='cf-desc'>{$description}</p>\n"; 
+            return "<p><label for='$id'>$label</label><br/>\n<textarea id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$placeholder}{$title}>{$onlyValue}</textarea></p><p class='cf-desc'>{$description}</p>\n"; 
 
         } else if ($this['type'] == 'hidden') {
             
