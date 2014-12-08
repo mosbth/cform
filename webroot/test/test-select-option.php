@@ -71,6 +71,6 @@ else if($status === false){
 <meta charset=utf8>
 <title>CForm Example: Creditcard checkout with two column layout</title>
 <h1>CForm Example: Useage of select option list</h1>
-<?=$form->GetHTML(array('columns' => $columns))?>
+<?=$form->GetHTML()?>
 
 <?php $footer = "footer_mos.php"; if(is_file($footer)) include($footer) ?>
