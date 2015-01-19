@@ -424,7 +424,8 @@ EOD;
         $request = null;
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $request = $_POST;
-            unset($_SESSION['form-failed']);
+            if (isset($_SESSION['form-failed']))
+                unset($_SESSION['form-failed']);
             $validates = true;
 
             foreach ($this->elements as $element) {
