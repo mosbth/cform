@@ -3,7 +3,6 @@ CForm a PHP class for creating, rendering and validating HTML forms.
 
 [![Latest Stable Version](https://poser.pugx.org/leaphly/cart-bundle/version.png)](https://packagist.org/packages/mos/cform)
 [![Build Status](https://travis-ci.org/mosbth/cform.png?branch=v2)](https://travis-ci.org/mosbth/cform)
-[![Coverage Status](https://coveralls.io/repos/mosbth/cform/badge.png)](https://coveralls.io/r/mosbth/cform)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?s=80b5a2ad3c062bd6e8215dd655ca8badfef4a40d)](https://scrutinizer-ci.com/g/mosbth/cform/)
 [![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?s=0f195aa8f17317cc1c427f9484fa5107e4558aed)](https://scrutinizer-ci.com/g/mosbth/cform/)
 
@@ -47,6 +46,7 @@ History
 
 v1.9.x (latest)
 
+* Now passing Travis.
 * Added testcases for `CHTMLElement`.
 * extending check()-method with callable arguments
 
