@@ -42,7 +42,7 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
     {
         $el = new \Mos\HTMLForm\CFormElement('test');
 
-        $el->validate('no-such-rule', $el);
+        $el->validate(['no-such-rule'], $el);
     }
 
 
