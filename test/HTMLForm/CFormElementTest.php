@@ -10,12 +10,12 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Test 
+     * Test
      *
      * @return void
      *
      */
-    public function testCreateElement() 
+    public function testCreateElement()
     {
         $el = new \Mos\HTMLForm\CFormElement('test');
 
@@ -31,29 +31,29 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Test 
+     * Test
      *
      * @expectedException Exception
      *
      * @return void
      *
      */
-    public function testValidationRuleNotFound() 
+    public function testValidationRuleNotFound()
     {
         $el = new \Mos\HTMLForm\CFormElement('test');
 
-        $el->validate('no-such-rule');
+        $el->validate('no-such-rule', $el);
     }
 
 
 
     /**
-     * Test 
+     * Test
      *
      * @return void
      *
      */
-    public function testGetValue() 
+    public function testGetValue()
     {
         $el = new \Mos\HTMLForm\CFormElement('test', ['value' => 42]);
 
@@ -69,12 +69,12 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Test 
+     * Test
      *
      * @return void
      *
      */
-    public function testValidateEmail() 
+    public function testValidateEmail()
     {
         $el = new \Mos\HTMLForm\CFormElement('test');
 
