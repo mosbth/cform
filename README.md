@@ -7,7 +7,7 @@ CForm a PHP class for creating, rendering and validating HTML forms.
 [![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?s=0f195aa8f17317cc1c427f9484fa5107e4558aed)](https://scrutinizer-ci.com/g/mosbth/cform/)
 
 Read about `CForm` here:
-* http://dbwebb.se/opensource/cimage 
+* http://dbwebb.se/opensource/cform 
 
 There is an article written on CForm, in swedish. 
 * http://dbwebb.se/kunskap/cform-en-php-klass-for-att-skapa-presentera-och-validera-html-formular
