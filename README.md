@@ -46,6 +46,7 @@ History
 
 v1.9.x (latest)
 
+* Add githook for pre commit and phpunit.
 * Adding phpcs as test to pass build on Travis.
 * Format code to pass phpcs, fix 9.
 * Scrutinizer takes care of code coverage itself, not depending on Travis.
