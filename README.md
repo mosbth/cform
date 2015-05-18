@@ -46,6 +46,7 @@ History
 
 v1.9.x (latest)
 
+* Scrutinizer takes care of code coverage itself, not depending on Travis.
 * Now passing Travis.
 * Added testcases for `CHTMLElement`.
 * extending check()-method with callable arguments
