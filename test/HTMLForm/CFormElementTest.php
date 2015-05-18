@@ -15,12 +15,12 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
      * @return void
      *
      */
-    public function testCreateElement() 
+    public function testCreateElement()
     {
         $el = new \Mos\HTMLForm\CFormElement('test');
 
         $res = $el['name'];
-        $exp = 'test1';
+        $exp = 'test';
         $this->assertEquals($res, $exp, "Created element name missmatch.");
 
         $res = $el->characterEncoding;
