@@ -15,7 +15,7 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
      * @return void
      *
      */
-    public function testCreateElement()
+    public function testCreateElement() 
     {
         $el = new \Mos\HTMLForm\CFormElement('test');
 
