@@ -3,8 +3,9 @@ CForm a PHP class for creating, rendering and validating HTML forms.
 
 [![Latest Stable Version](https://poser.pugx.org/leaphly/cart-bundle/version.png)](https://packagist.org/packages/mos/cform)
 [![Build Status](https://travis-ci.org/mosbth/cform.png?branch=v2)](https://travis-ci.org/mosbth/cform)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?s=80b5a2ad3c062bd6e8215dd655ca8badfef4a40d)](https://scrutinizer-ci.com/g/mosbth/cform/)
-[![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?s=0f195aa8f17317cc1c427f9484fa5107e4558aed)](https://scrutinizer-ci.com/g/mosbth/cform/)
+[![Build Status](https://scrutinizer-ci.com/g/mosbth/cform/badges/build.png?b=v2)](https://scrutinizer-ci.com/g/mosbth/cform/build-status/v2)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?b=v2)](https://scrutinizer-ci.com/g/mosbth/cform/?branch=v2)
+[![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?b=v2)](https://scrutinizer-ci.com/g/mosbth/cform/?branch=v2)
 
 Read about `CForm` here:
 * http://dbwebb.se/opensource/cform 
