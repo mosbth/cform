@@ -3,9 +3,10 @@
 namespace Mos\HTMLForm;
 
 /**
- * Form element 
+ * Form element
  */
-class CFormElementRange extends CFormElement {
+class CFormElementRange extends CFormElement
+{
 
     /**
      * Constructor
@@ -15,11 +16,10 @@ class CFormElementRange extends CFormElement {
      *
      * @return void
      */
-    public function __construct($name, $attributes = []) 
+    public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
         $this['type'] = 'range';
         $this->UseNameAsDefaultLabel();
     }
 }
-

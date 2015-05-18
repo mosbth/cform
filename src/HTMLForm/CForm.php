@@ -34,10 +34,31 @@ class CForm implements \ArrayAccess
     /**
      * Implementing ArrayAccess for this->elements
      */
-    public function offsetSet($offset, $value) { if (is_null($offset)) { $this->elements[] = $value; } else { $this->elements[$offset] = $value; }}
-    public function offsetExists($offset) { return isset($this->elements[$offset]); }
-    public function offsetUnset($offset) { unset($this->elements[$offset]); }
-    public function offsetGet($offset) { return isset($this->elements[$offset]) ? $this->elements[$offset] : null; }
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->elements[] = $value;
+        } else {
+            $this->elements[$offset] = $value;
+        }
+    }
+    
+    public function offsetExists($offset)
+    {
+        return isset($this->elements[$offset]);
+    }
+    
+    public function offsetUnset($offset)
+    {
+        unset($this->elements[$offset]);
+    }
+    
+    public function offsetGet($offset)
+    {
+        return isset($this->elements[$offset])
+            ? $this->elements[$offset]
+            : null;
+    }
 
 
 
@@ -153,11 +174,22 @@ class CForm implements \ArrayAccess
     public function getHTML($options = [])
     {
         $defaults = [
-            'start'          => false,  // Only return the start of the form element
-            'columns'        => 1,      // Layout all elements in one column
-            'use_buttonbar'  => true,   // Layout consequtive buttons as one element wrapped in <p>
-            'use_fieldset'   => true,   // Wrap form fields within <fieldset>
-            'legend'         => isset($this->form['legend']) ? $this->form['legend'] : null,   // Use legend for fieldset
+            // Only return the start of the form element
+            'start'          => false,
+            
+            // Layout all elements in one column
+            'columns'        => 1,
+            
+            // Layout consequtive buttons as one element wrapped in <p>
+            'use_buttonbar'  => true,
+
+            // Wrap fields within <fieldset>
+            'use_fieldset'   => true,
+
+            // Use legend for fieldset
+            'legend'         => isset($this->form['legend']) ?
+                $this->form['legend']
+                : null,
         ];
         $options = array_merge($defaults, $options);
 
@@ -219,7 +251,7 @@ EOD;
         $elements = array();
         reset($this->elements);
         while (list($key, $element) = each($this->elements)) {
-
+            
             if (in_array($element['type'], array('submit', 'reset', 'button'))
                 && $options['use_buttonbar']
             ) {
@@ -263,7 +295,7 @@ EOD;
      *
      * @return array with HTML for the formelements.
      */
-    public function getHTMLLayoutForElements($elements, $options=array())
+    public function getHTMLLayoutForElements($elements, $options = [])
     {
         $defaults = [
             'columns' => 1,
@@ -278,7 +310,7 @@ EOD;
                 $html .= $element['html'];
             }
 
-        } else if ($options['columns'] === 2) {
+        } elseif ($options['columns'] === 2) {
 
             $buttonbar = null;
             $col1 = null;
@@ -300,7 +332,16 @@ EOD;
                 }
             }
 
-            $html = "<div class='cform-columns-2'>\n<div class='cform-column-1'>\n{$col1}\n</div>\n<div class='cform-column-2'>\n{$col2}\n</div>\n{$buttonbar}</div>\n";
+            $html = <<<EOD
+<div class='cform-columns-2'>
+<div class='cform-column-1'>
+{$col1}
+</div>
+<div class='cform-column-2'>
+{$col2}
+</div>
+{$buttonbar}</div>
+EOD;
         }
 
         return $html;
@@ -382,7 +423,7 @@ EOD;
 
             if ($this[$key]['type'] === 'checkbox') {
                 $this[$key]['checked'] = true;
-            } else if ($this[$key]['type'] === 'radio') {
+            } elseif ($this[$key]['type'] === 'radio') {
                 $this[$key]['checked'] = $val['value'];
             }
 
@@ -424,8 +465,9 @@ EOD;
         $request = null;
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $request = $_POST;
-            if (isset($_SESSION['form-failed']))
+            if (isset($_SESSION['form-failed'])) {
                 unset($_SESSION['form-failed']);
+            }
             $validates = true;
 
             foreach ($this->elements as $element) {
@@ -481,7 +523,11 @@ EOD;
 
                         if (isset($element['callback-args'])) {
 
-                            $callbackStatus = call_user_func_array($element['callback'], array_merge(array($this), $element['callback-args']));
+                            $callbackStatus = call_user_func_array(
+                                $element['callback'],
+                                array_merge([$this]),
+                                $element['callback-args']
+                            );
 
                         } else {
 
@@ -505,14 +551,18 @@ EOD;
                         $element['checked'] = false;
                     }
 
-                    // Do validation even when the form element is not set? Duplicate code, revise this section and move outside this if-statement?
+                    // Do validation even when the form element is not set?
+                    // Duplicate code, revise this section and move outside
+                    // this if-statement?
                     if (isset($element['validation'])) {
 
                         $element['validation-pass'] = $element->Validate($element['validation'], $this);
 
                         if ($element['validation-pass'] === false) {
 
-                            $values[$element['name']] = array('value'=>$element['value'], 'validation-messages'=>$element['validation-messages']);
+                            $values[$element['name']] = [
+                                'value' => $element['value'], 'validation-messages' => $element['validation-messages']
+                            ];
                             $validates = false;
                         }
                     }

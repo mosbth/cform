@@ -3,7 +3,7 @@
 namespace Mos\HTMLForm;
 
 /**
- * Form element 
+ * Form element
  */
 class CFormElementTextarea extends CFormElement
 {
@@ -16,7 +16,7 @@ class CFormElementTextarea extends CFormElement
      *
      * @return void
      */
-    public function __construct($name, $attributes = []) 
+    public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
         $this['type'] = 'textarea';

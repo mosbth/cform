@@ -3,7 +3,7 @@
 namespace Mos\HTMLForm;
 
 /**
- * Form element 
+ * Form element
  */
 class CFormElementRadio extends CFormElement
 {
@@ -16,12 +16,9 @@ class CFormElementRadio extends CFormElement
      *
      * @return void
      */
-    public function __construct($name, $attributes = []) 
+    public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
         $this['type']     = 'radio';
-        //$this['checked']  = isset($attributes['checked']) ? $attributes['checked'] : false;
-        //$this['value']    = isset($attributes['value']) ? $attributes['value'] : $name;
     }
 }
-

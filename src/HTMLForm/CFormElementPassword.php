@@ -3,7 +3,7 @@
 namespace Mos\HTMLForm;
 
 /**
- * Form element 
+ * Form element
  */
 class CFormElementPassword extends CFormElement
 {
@@ -16,11 +16,10 @@ class CFormElementPassword extends CFormElement
      *
      * @return void
      */
-    public function __construct($name, $attributes = []) 
+    public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
         $this['type'] = 'password';
         $this->UseNameAsDefaultLabel();
     }
 }
-

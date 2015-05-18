@@ -8,11 +8,12 @@ php:
     - nightly
 
 before_script:
-    #- wget https://scrutinizer-ci.com/ocular.phar
-    - composer install
+    #- composer install
+
+    # phpcs
+    pyrus install pear/PHP_CodeSniffer
+    phpenv rehash
 
 script:
     - phpunit
-
-after_script:
-    #- php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    - phpcs

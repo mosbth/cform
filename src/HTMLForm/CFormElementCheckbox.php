@@ -3,7 +3,7 @@
 namespace Mos\HTMLForm;
 
 /**
- * Form element 
+ * Form element
  */
 class CFormElementCheckbox extends CFormElement
 {
@@ -16,13 +16,20 @@ class CFormElementCheckbox extends CFormElement
      *
      * @return void
      */
-    public function __construct($name, $attributes = []) 
+    public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
-        $this['type']     = 'checkbox';
-        $this['checked']  = isset($attributes['checked']) ? $attributes['checked'] : false;
-        $this['value']    = isset($attributes['value']) ? $attributes['value'] : $name;
+
+        $this['type'] = 'checkbox';
+        
+        $this['checked'] = isset($attributes['checked'])
+            ? $attributes['checked']
+            : false;
+            
+        $this['value'] = isset($attributes['value'])
+            ? $attributes['value']
+            : $name;
+            
         $this->UseNameAsDefaultLabel(null);
     }
 }
-
