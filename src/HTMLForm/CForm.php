@@ -376,7 +376,7 @@ EOD;
     /**
      * Get output messages as <output>.
      *
-     * @return string/null with the complete <output> element or null if no output.
+     * @return string|null with the complete <output> element or null if no output.
      */
     public function getOutput()
     {
@@ -448,7 +448,7 @@ EOD;
      * @param callable $callIfSuccess handler to call if function returns true.
      * @param callable $callIfFail    handler to call if function returns true.
      *
-     * @return mixed, $callbackStatus if submitted&validates, false if not validate, null if not submitted.
+     * @return boolean|null $callbackStatus if submitted&validates, false if not validate, null if not submitted.
      *         If submitted the callback function will return the actual value which should be true or false.
      */
     public function check($callIfSuccess = null, $callIfFail = null)
