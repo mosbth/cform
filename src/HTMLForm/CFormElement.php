@@ -487,12 +487,12 @@ EOD;
     /**
      * Validate the form element value according a ruleset.
      *
-     * @param array $rules validation rules.
-     * @param CForm $form  the parent form.
+     * @param array      $rules validation rules.
+     * @param CForm|null $form  the parent form.
      *
      * @return boolean true if all rules pass, else false.
      */
-    public function validate($rules, $form)
+    public function validate($rules, $form = null)
     {
         $regExpEmailAddress = '/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i';
         $tests = [
