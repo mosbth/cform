@@ -73,6 +73,8 @@ class CForm implements \ArrayAccess
     public function create($form = [], $elements = [])
     {
         $this->form = $form;
+        $this->elements = [];
+        
         if (!empty($elements)) {
             foreach ($elements as $key => $element) {
                 $this->elements[$key] = CFormElement::Create($key, $element);
