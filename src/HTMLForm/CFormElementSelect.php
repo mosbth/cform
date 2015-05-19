@@ -15,8 +15,6 @@ class CFormElementSelect extends CFormElement
      * @param array  $attributes to set to the element. Default is an empty array.
      *
      * @throws CFormException if missing <options>
-     *
-     * @return void
      */
     public function __construct($name, $attributes = [])
     {
