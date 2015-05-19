@@ -79,7 +79,7 @@ class CFormElementTest extends \PHPUnit_Framework_TestCase
         $el = new \Mos\HTMLForm\CFormElement('test');
 
         $el['value'] = 'mos@dbwebb.se';
-        $res = $el->validate(['email_adress'], null);
+        $res = $el->validate(['email_adress']);
         $this->assertTrue($res, "Validation email fails.");
     }
 }
