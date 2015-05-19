@@ -5,7 +5,7 @@ namespace Mos\HTMLForm;
 /**
  * Form element
  */
-class CFormElementSelectMultiple extends CFormElement
+class CFormElementSelectMultiple extends CFormElementSelect
 {
 
     /**
@@ -20,10 +20,5 @@ class CFormElementSelectMultiple extends CFormElement
     {
         parent::__construct($name, $attributes);
         $this['type'] = 'select-multiple';
-        $this->UseNameAsDefaultLabel();
-
-        if (!is_array($this['options'])) {
-            throw new CFormException("Select needs options, did you forget to specify them when creating the element?");
-        }
     }
 }
