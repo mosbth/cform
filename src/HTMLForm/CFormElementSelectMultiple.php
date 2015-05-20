@@ -19,6 +19,38 @@ class CFormElementSelectMultiple extends CFormElementSelect
     public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
-        $this['type'] = 'select-multiple';
+        $this['type']     = 'select-multiple';
+        $this['multiple'] = true;
+    }
+
+
+
+    /**
+     * Get HTML code for a element.
+     *
+     * @return string HTML code for the element.
+     */
+    public function getHTML()
+    {
+        extract($this->getHTMLDetails());
+
+        $name = " name='{$this['name']}[]'";
+        $options = null;
+        foreach ($this['options'] as $optValue => $optText) {
+            $selected = is_array($this['values']) && in_array($optValue, $this['values']) ? " selected" : null;
+            $options .= "<option value='{$optValue}'{$selected}>{$optText}</option>\n";
+        }
+
+        return <<<EOD
+<p>
+<label for='$id'>$label</label>
+<br/>
+<select id='$id'{$size}{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>
+{$options}
+</select>
+{$messages}
+</p>
+<p class='cf-desc'>{$description}</p>
+EOD;
     }
 }

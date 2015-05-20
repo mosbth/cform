@@ -184,11 +184,11 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Get HTML code for a element.
+     * Get details for a HTML element, prepare for creating HTML code for it.
      *
      * @return HTML code for the element.
      */
-    public function getHTML()
+    public function getHTMLDetails()
     {
         // Add disabled to be able to disable a form element
         // Add maxlength
@@ -295,7 +295,47 @@ class CFormElement implements \ArrayAccess
             : null;
 
         $messages = $this->getValidationMessages();
+        
+        return [
+            'id'            => $id,
+            'class'         => $class,
+            'name'          => $name,
+            'label'         => $label,
+            'autofocus'     => $autofocus,
+            'required'      => $required,
+            'readonly'      => $readonly,
+            'placeholder'   => $placeholder,
+            'multiple'      => $multiple,
+            'min'           => $min,
+            'max'           => $max,
+            'low'           => $low,
+            'high'          => $high,
+            'step'          => $step,
+            'optimum'       => $optimum,
+            'size'          => $size,
+            'text'          => $text,
+            'checked'       => $checked,
+            'type'          => $type,
+            'title'         => $title,
+            'pattern'       => $pattern,
+            'description'   => $description,
+            'onlyValue'     => $onlyValue,
+            'value'         => $value,
+            'messages'      => $messages,
+        ];
+    }
 
+
+
+    /**
+     * Get HTML code for a element.
+     *
+     * @return HTML code for the element.
+     */
+    public function getHTML()
+    {
+        extract($this->getHTMLDetails());
+        
         // Create HTML for the element
         if (in_array($this['type'], ['submit', 'reset', 'button'])) {
  
@@ -405,50 +445,6 @@ EOD;
 </div>
 EOD;
 
-        } elseif ($this['type'] == 'select') {
-
-            // select
-            $options = null;
-            foreach ($this['options'] as $optValue => $optText) {
-                $options .= "<option value='{$optValue}'"
-                    . (($this['value'] == $optValue)
-                        ? " selected"
-                        : null)
-                    . ">{$optText}</option>\n";
-            }
-            return <<<EOD
-<p>
-<label for='$id'>$label</label>
-<br/>
-<select id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>
-{$options}
-</select>
-{$messages}
-</p>
-<p class='cf-desc'>{$description}</p>
-EOD;
-
-        } elseif ($this['type'] == 'select-multiple') {
-            
-            // select-multiple
-            $name = " name='{$this['name']}[]'";
-            $options = null;
-            foreach ($this['options'] as $optValue => $optText) {
-                $selected = is_array($this['values']) && in_array($optValue, $this['values']) ? " selected" : null;
-                $options .= "<option value='{$optValue}'{$selected}>{$optText}</option>\n";
-            }
-            return <<<EOD
-<p>
-<label for='$id'>$label</label>
-<br/>
-<select id='$id' multiple{$size}{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>
-{$options}
-</select>
-{$messages}
-</p>
-<p class='cf-desc'>{$description}</p>
-EOD;
-        
         } elseif ($this['type'] == 'file-multiple') {
 
             // file-multiple

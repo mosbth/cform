@@ -79,7 +79,7 @@ class CFormElementSelectMultipleTest extends \PHPUnit_Framework_TestCase
 <p>
 <label for='form-element-name'>Name:</label>
 <br/>
-<select id='form-element-name' multiple name='name[]'>
+<select id='form-element-name' name='name[]' multiple>
 
 </select>
 
@@ -114,7 +114,7 @@ EOD;
 <p>
 <label for='form-element-name'>Name:</label>
 <br/>
-<select id='form-element-name' multiple name='name[]'>
+<select id='form-element-name' name='name[]' multiple>
 <option value='default'>Select...</option>
 <option value='01'>January</option>
 

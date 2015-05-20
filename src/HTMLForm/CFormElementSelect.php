@@ -26,4 +26,37 @@ class CFormElementSelect extends CFormElement
             throw new CFormException("Select needs options, did you forget to specify them when creating the element?");
         }
     }
+
+
+
+    /**
+     * Get HTML code for a element.
+     *
+     * @return string HTML code for the element.
+     */
+    public function getHTML()
+    {
+        extract($this->getHTMLDetails());
+
+        $options = null;
+        foreach ($this['options'] as $optValue => $optText) {
+            $options .= "<option value='{$optValue}'"
+                . (($this['value'] == $optValue)
+                    ? " selected"
+                    : null)
+                . ">{$optText}</option>\n";
+        }
+
+        return <<<EOD
+<p>
+<label for='$id'>$label</label>
+<br/>
+<select id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>
+{$options}
+</select>
+{$messages}
+</p>
+<p class='cf-desc'>{$description}</p>
+EOD;
+    }
 }
