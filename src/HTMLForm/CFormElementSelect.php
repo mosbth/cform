@@ -36,8 +36,9 @@ class CFormElementSelect extends CFormElement
      */
     public function getHTML()
     {
-        extract($this->getHTMLDetails());
-
+        $details = $this->getHTMLDetails();
+        extract($details);
+        
         $options = null;
         foreach ($this['options'] as $optValue => $optText) {
             $options .= "<option value='{$optValue}'"

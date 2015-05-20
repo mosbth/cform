@@ -334,7 +334,8 @@ class CFormElement implements \ArrayAccess
      */
     public function getHTML()
     {
-        extract($this->getHTMLDetails());
+        $details = $this->getHTMLDetails();
+        extract($details);
         
         // Create HTML for the element
         if (in_array($this['type'], ['submit', 'reset', 'button'])) {

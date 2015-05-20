@@ -32,8 +32,9 @@ class CFormElementSelectMultiple extends CFormElementSelect
      */
     public function getHTML()
     {
-        extract($this->getHTMLDetails());
-
+        $details = $this->getHTMLDetails();
+        extract($details);
+        
         $name = " name='{$this['name']}[]'";
         $options = null;
         foreach ($this['options'] as $optValue => $optText) {
