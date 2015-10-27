@@ -45,9 +45,9 @@ Todo
 History
 ----------------------------------
 
-v1.9.x (latest)
+v1.9.2 (2015-10-27)
 
-* Adding whitelist to phpunit.
+* Adding whitelist to phpunit code coverage to support phpunit 5.0.
 * Add githook for pre commit of phpunit and phpcs. 
 * Adding phpcs as test to pass build on Travis.
 * Format code to pass phpcs, fix 9.
