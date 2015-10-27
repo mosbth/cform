@@ -47,6 +47,7 @@ History
 
 v1.9.x (latest)
 
+* Adding whitelist to phpunit.
 * Add githook for pre commit of phpunit and phpcs. 
 * Adding phpcs as test to pass build on Travis.
 * Format code to pass phpcs, fix 9.
