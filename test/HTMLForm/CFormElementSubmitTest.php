@@ -46,9 +46,7 @@ class CFormElementSubmitTest extends \PHPUnit_Framework_TestCase
     public function testGetHTMLEmpty()
     {
         $name = "name";
-        $attr = [
-            "options" => []
-        ];
+        $attr = [];
         
         $elem = new \Mos\HTMLForm\CFormElementSubmit($name, $attr);
 
