@@ -45,6 +45,11 @@ Todo
 History
 ----------------------------------
 
+v1.9.2* (2015-10-30)
+
+* Added formnovalidate to submit and buttons.
+
+
 v1.9.2 (2015-10-27)
 
 * Adding whitelist to phpunit code coverage to support phpunit 5.0.

@@ -285,7 +285,11 @@ class CFormElement implements \ArrayAccess
         $description = isset($this['description'])
             ? $this['description']
             : null;
-            
+
+        $novalidate = isset($this['formnovalidate'])
+            ? " formnovalidate='formnovalidate'"
+            : null;
+
         $onlyValue = isset($this['value'])
             ? htmlentities($this['value'], ENT_QUOTES, $this->characterEncoding)
             : null;
@@ -319,6 +323,7 @@ class CFormElement implements \ArrayAccess
             'title'         => $title,
             'pattern'       => $pattern,
             'description'   => $description,
+            'novalidate'    => $novalidate,
             'onlyValue'     => $onlyValue,
             'value'         => $value,
             'messages'      => $messages,
@@ -343,7 +348,7 @@ class CFormElement implements \ArrayAccess
             // type=submit || reset || button
             return <<<EOD
 <span>
-<input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$title} />
+<input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$novalidate}{$title} />
 </span>
 EOD;
  
