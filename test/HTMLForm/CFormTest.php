@@ -19,6 +19,7 @@ class CFormTest extends \PHPUnit_Framework_TestCase
     {
         $form = new \Mos\HTMLForm\CForm();
         $form->create();
+
         $res = $form->getHTML();
         $exp = <<<EOD
 \n<form method='post'>
@@ -30,7 +31,36 @@ class CFormTest extends \PHPUnit_Framework_TestCase
 </form>\n
 EOD;
 
-        $this->assertEquals($res, $exp, "Empty form render missmatch.");
+        $this->assertEquals($res, $exp, "Empty form missmatch.");
+    }
+
+
+
+    /**
+     * Test
+     *
+     * @return void
+     *
+     */
+    public function testCreate2()
+    {
+        $form = new \Mos\HTMLForm\CForm();
+        $form->create([
+            "enctype" => "multipart/form-data"
+        ]);
+
+        $res = $form->getHTML();
+        $exp = <<<EOD
+\n<form method='post' enctype='multipart/form-data'>
+<fieldset>
+
+
+
+</fieldset>
+</form>\n
+EOD;
+
+        $this->assertEquals($res, $exp, "Form with enctype missmatch.");
     }
 
 

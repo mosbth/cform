@@ -196,11 +196,12 @@ class CForm implements \ArrayAccess
         $options = array_merge($defaults, $options);
 
         $form = array_merge($this->form, $options);
-        $id     = isset($form['id'])      ? " id='{$form['id']}'" : null;
-        $class  = isset($form['class'])   ? " class='{$form['class']}'" : null;
-        $name   = isset($form['name'])    ? " name='{$form['name']}'" : null;
-        $action = isset($form['action'])  ? " action='{$form['action']}'" : null;
-        $method = isset($form['method'])  ? " method='{$form['method']}'" : " method='post'";
+        $id      = isset($form['id'])      ? " id='{$form['id']}'" : null;
+        $class   = isset($form['class'])   ? " class='{$form['class']}'" : null;
+        $name    = isset($form['name'])    ? " name='{$form['name']}'" : null;
+        $action  = isset($form['action'])  ? " action='{$form['action']}'" : null;
+        $method  = isset($form['method'])  ? " method='{$form['method']}'" : " method='post'";
+        $enctype = isset($form['enctype']) ? " enctype='{$form['enctype']}'" : null;
 
         if ($options['start']) {
             return "<form{$id}{$class}{$name}{$action}{$method}>\n";
@@ -222,7 +223,7 @@ class CForm implements \ArrayAccess
         $output         = $this->GetOutput();
 
         $html = <<< EOD
-\n<form{$id}{$class}{$name}{$action}{$method}>
+\n<form{$id}{$class}{$name}{$action}{$method}{$enctype}>
 {$fieldsetStart}
 {$legend}
 {$elements}

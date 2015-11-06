@@ -45,8 +45,9 @@ Todo
 History
 ----------------------------------
 
-v1.9.2* (2015-10-30)
+v1.9.3 (2015-11-06)
 
+* Added support for enctype="multipart/form-data".
 * Added formnovalidate to submit and buttons.
 
 
