@@ -25,10 +25,10 @@ $form->create(
             'type' => 'submit',
             'value' => 'Upload file',
             'callback' => function($form) {
-                //var_dump($_POST);
-                //var_dump($_FILES);
+
                 $form->AddOutput("<p><i>DoSubmit(): Form was submitted. Do stuff (save to database) and return true (success) or false (failed processing form)</i></p>");
                 $form->AddOutput("<p><b>The file is now available in the \$_FILE array</b></p><pre>" . print_r($_FILES, true) . "</pre>");
+                
                 $form->saveInSession = true;
                 return true;
             }
