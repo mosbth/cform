@@ -45,6 +45,11 @@ Todo
 History
 ----------------------------------
 
+v1.9.3* (2015-11-06)
+
+* Added example for file upload `example/test/test-file-upload.php`.
+
+
 v1.9.3 (2015-11-06)
 
 * Added support for enctype="multipart/form-data".
