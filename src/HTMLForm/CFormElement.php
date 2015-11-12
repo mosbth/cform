@@ -98,7 +98,6 @@ class CFormElement implements \ArrayAccess
      */
     public static function create($name, $attributes)
     {
-    
         // Not supported is type=image, <button>, list, output, select-optgroup
         $types = [
 
@@ -616,6 +615,18 @@ EOD;
      * @return mixed the value of the form element.
      */
     public function getValue()
+    {
+        return $this['value'];
+    }
+
+
+
+    /**
+     * Get the value of the form element.
+     *
+     * @return mixed the value of the form element.
+     */
+    public function value()
     {
         return $this['value'];
     }
