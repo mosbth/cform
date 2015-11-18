@@ -19,4 +19,16 @@ class CFormElementCheckboxMultiple extends CFormElement
         parent::__construct($name, $attributes);
         $this['type'] = 'checkbox-multiple';
     }
+
+
+
+    /**
+     * Get the value of the form element.
+     *
+     * @return array the checked values of the form element.
+     */
+    public function value()
+    {
+        return $this['checked'];
+    }
 }

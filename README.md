@@ -45,9 +45,11 @@ Todo
 History
 ----------------------------------
 
-v1.9.3* (2015-11-06)
+v1.9.4 (2015-11-18)
 
-* Added example for file upload `example/test/test-file-upload.php`.
+* Made $form->value("items") work for CFormElementCheckboxMultiple.
+* Added new example for `webroot/test/multiple-checkbox.php`.
+* Added example for file upload `webroot/test/test-file-upload.php`.
 
 
 v1.9.3 (2015-11-06)

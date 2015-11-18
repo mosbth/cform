@@ -161,7 +161,8 @@ class CForm implements \ArrayAccess
      */
     public function value($element)
     {
-        return $this[$element]['value'];
+        //return $this[$element]['value'];
+        return $this[$element]->value();
     }
 
 
