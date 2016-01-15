@@ -550,6 +550,11 @@ EOD;
                     $values[$elementName]['value'] = $element['value'] = $request[$elementName];
                 }
 
+                // If the element is a password, do not remember.
+                if ($elementType === 'password') {
+                    $values[$elementName]['value'] = null;
+                }
+
                 // If the element is a checkbox, set its value of checked.
                 if ($elementType === 'checkbox') {
                     $element['checked'] = true;
