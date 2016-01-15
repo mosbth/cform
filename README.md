@@ -6,6 +6,7 @@ CForm a PHP class for creating, rendering and validating HTML forms.
 [![Build Status](https://scrutinizer-ci.com/g/mosbth/cform/badges/build.png?b=v2)](https://scrutinizer-ci.com/g/mosbth/cform/build-status/v2)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mosbth/cform/badges/quality-score.png?b=v2)](https://scrutinizer-ci.com/g/mosbth/cform/?branch=v2)
 [![Code Coverage](https://scrutinizer-ci.com/g/mosbth/cform/badges/coverage.png?b=v2)](https://scrutinizer-ci.com/g/mosbth/cform/?branch=v2)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f49294b6-7887-4424-afbd-404b6c0e6243/mini.png)](https://insight.sensiolabs.com/projects/f49294b6-7887-4424-afbd-404b6c0e6243)
 
 Read about `CForm` here:
 * http://dbwebb.se/opensource/cform 
@@ -47,6 +48,9 @@ History
 
 v1.9.5 (2016-01-15)
 
+* Rewrote exampleprograms to use new CFormModel as baseclass.
+* Introduced CFormModel as baseclass for writing forms in classes.
+* Add badge for SensioLabs.
 * Support several instances of cform on the same page, #23.
 
 

@@ -37,8 +37,8 @@ matrix:
 before_script:
 
     # Store all files in your own bin
-    #- mkdir bin
-    #- export PATH=$PATH:$PWD/bin/
+    - mkdir bin
+    - export PATH=$PATH:$PWD/bin/
 
 
     # Install validation tools
