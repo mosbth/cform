@@ -16,6 +16,8 @@ class CForm implements \ArrayAccess
     public $form;     // array with settings for the form
     public $elements; // array with all form elements
     public $output;   // array with messages to display together with the form
+    public $session;  // array with key values for the session
+
 
 
     /**
@@ -72,15 +74,29 @@ class CForm implements \ArrayAccess
      */
     public function create($form = [], $elements = [])
     {
-        $this->form = $form;
+        $defaults = [
+            // Always have a id for the form
+            "id" => "cform",
+        ];
+        $this->form = array_merge($defaults, $form);
+
         $this->elements = [];
-        
         if (!empty($elements)) {
             foreach ($elements as $key => $element) {
                 $this->elements[$key] = CFormElement::Create($key, $element);
             }
         }
+
         $this->output = [];
+
+        // Setting keys used in the session
+        $generalKey = "mos/cform-" . $this->form["id"] . "#";
+        $this->session = [
+            "save"      => $generalKey . "save",
+            "output"    => $generalKey . "output",
+            "failed"    => $generalKey . "failed",
+            "remember"  => $generalKey . "remember",
+        ];
 
         return $this;
     }
@@ -142,10 +158,11 @@ class CForm implements \ArrayAccess
      */
     public function addOutput($str)
     {
-        if (isset($_SESSION['form-output'])) {
-            $_SESSION['form-output'] .= " $str";
+        $key = $this->session["output"];
+        if (isset($_SESSION[$key])) {
+            $_SESSION[$key] .= " $str";
         } else {
-            $_SESSION['form-output'] = $str;
+            $_SESSION[$key] = $str;
         }
         return $this;
     }
@@ -178,19 +195,19 @@ class CForm implements \ArrayAccess
     {
         $defaults = [
             // Only return the start of the form element
-            'start'          => false,
+            'start'         => false,
             
             // Layout all elements in one column
-            'columns'        => 1,
+            'columns'       => 1,
             
             // Layout consequtive buttons as one element wrapped in <p>
-            'use_buttonbar'  => true,
+            'use_buttonbar' => true,
 
             // Wrap fields within <fieldset>
-            'use_fieldset'   => true,
+            'use_fieldset'  => true,
 
             // Use legend for fieldset
-            'legend'         => isset($this->form['legend']) ?
+            'legend'        => isset($this->form['legend']) ?
                 $this->form['legend']
                 : null,
         ];
@@ -203,6 +220,7 @@ class CForm implements \ArrayAccess
         $action  = isset($form['action'])  ? " action='{$form['action']}'" : null;
         $method  = isset($form['method'])  ? " method='{$form['method']}'" : " method='post'";
         $enctype = isset($form['enctype']) ? " enctype='{$form['enctype']}'" : null;
+        $cformId = isset($form['id'])      ? "{$form['id']}" : null;
 
         if ($options['start']) {
             return "<form{$id}{$class}{$name}{$action}{$method}>\n";
@@ -225,6 +243,7 @@ class CForm implements \ArrayAccess
 
         $html = <<< EOD
 \n<form{$id}{$class}{$name}{$action}{$method}{$enctype}>
+<input type="hidden" name="mos/cform-id" value="$cformId" />
 {$fieldsetStart}
 {$legend}
 {$elements}
@@ -421,7 +440,7 @@ EOD;
             if (isset($val['values'])) {
                 $this[$key]['checked'] = $val['values'];
                 //$this[$key]['values']  = $val['values'];
-            } else {
+            } elseif (isset($val['value'])) {
                 $this[$key]['value'] = $val['value'];
             }
 
@@ -458,142 +477,166 @@ EOD;
         $remember = null;
         $validates = null;
         $callbackStatus = null;
-        $values = array();
+        $values = [];
 
         // Remember output messages in session
-        if (isset($_SESSION['form-output'])) {
-            $this->output = $_SESSION['form-output'];
-            unset($_SESSION['form-output']);
+        $output = $this->session["output"];
+        if (isset($_SESSION[$output])) {
+            $this->output = $_SESSION[$output];
+            unset($_SESSION[$output]);
         }
 
-        $request = null;
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $request = $_POST;
-            if (isset($_SESSION['form-failed'])) {
-                unset($_SESSION['form-failed']);
+        // Check if this was a post request
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            // Its not posted, but check if values should be used from session
+            $failed   = $this->session["failed"];
+            $remember = $this->session["remember"];
+            $save     = $this->session["save"];
+            
+            if (isset($_SESSION[$failed])) {
+
+                // Read form data from session if the previous post failed during validation.
+                $this->InitElements($_SESSION[$failed]);
+                unset($_SESSION[$failed]);
+
+            } elseif (isset($_SESSION[$remember])) {
+
+                // Read form data from session if some form elements should be remembered
+                foreach ($_SESSION[$remember] as $key => $val) {
+                    $this[$key]['value'] = $val['value'];
+                }
+                unset($_SESSION[$remember]);
+
+            } elseif (isset($_SESSION[$save])) {
+
+                // Read form data from session,
+                // useful during test where the original form is displayed with its posted values
+                $this->InitElements($_SESSION[$save]);
+                unset($_SESSION[$save]);
             }
-            $validates = true;
+            
+            return null;
+        }
+        $request = $_POST;
 
-            foreach ($this->elements as $element) {
+        // Check if its a cform we are dealing with
+        if (!isset($request["mos/cform-id"])) {
+            return null;
+        }
 
-                // The form element has a value set
-                if (isset($request[$element['name']])) {
+        // Check if its this form that was posted
+        if ($this->form["id"] !== $request["mos/cform-id"]) {
+            return null;
+        }
 
-                    // Multiple choices comes in the form of an array
-                    if (is_array($request[$element['name']])) {
-                        $values[$element['name']]['values'] = $element['checked'] = $request[$element['name']];
-                    } else {
-                        $values[$element['name']]['value'] = $element['value'] = $request[$element['name']];
-                    }
+        // This form was posted, process it
+        if (isset($_SESSION[$this->session["failed"]])) {
+            unset($_SESSION[$this->session["failed"]]);
+        }
+        
+        $validates = true;
+        foreach ($this->elements as $element) {
 
-                    // If the element is a checkbox, set its value of checked.
-                    if ($element['type'] === 'checkbox') {
-                        $element['checked'] = true;
-                    }
+            $elementName = $element['name'];
+            $elementType = $element['type'];
 
-                    // If the element is a radio, set the value to checked.
-                    if ($element['type'] === 'radio') {
-                        $element['checked'] = $element['value'];
-                    }
+            // The form element has a value set
+            if (isset($request[$elementName])) {
 
-                    // Do validation of form element
-                    if (isset($element['validation'])) {
-
-                        $element['validation-pass'] = $element->Validate($element['validation'], $this);
-
-                        if ($element['validation-pass'] === false) {
-
-                            $values[$element['name']] = [
-                                'value'=>$element['value'],
-                                'validation-messages' => $element['validation-messages']
-                            ];
-                            $validates = false;
-
-                        }
-                    }
-
-                    // Hmmm.... Why did I need this remember thing?
-                    if (isset($element['remember'])
-                        && $element['remember']
-                    ) {
-                        $values[$element['name']] = ['value'=>$element['value']];
-                        $remember = true;
-                    }
-
-                    // Carry out the callback if the form element validates
-                    if (isset($element['callback'])
-                        && $validates
-                    ) {
-
-                        if (isset($element['callback-args'])) {
-
-                            $callbackStatus = call_user_func_array(
-                                $element['callback'],
-                                array_merge([$this]),
-                                $element['callback-args']
-                            );
-
-                        } else {
-
-                            $callbackStatus = call_user_func($element['callback'], $this);
-                        }
-                    }
-
+                // Multiple choices comes in the form of an array
+                if (is_array($request[$elementName])) {
+                    $values[$elementName]['values'] = $element['checked'] = $request[$elementName];
                 } else {
+                    $values[$elementName]['value'] = $element['value'] = $request[$elementName];
+                }
 
-                    // The form element has no value set
+                // If the element is a checkbox, set its value of checked.
+                if ($elementType === 'checkbox') {
+                    $element['checked'] = true;
+                }
 
-                    // Set element to null, then we know it was not set.
-                    //$element['value'] = null;
-                    //echo $element['type'] . ':' . $element['name'] . ':' . $element['value'] . '<br>';
+                // If the element is a radio, set the value to checked.
+                if ($elementType === 'radio') {
+                    $element['checked'] = $element['value'];
+                }
 
-                    // If the element is a checkbox, clear its value of checked.
-                    if ($element['type'] === 'checkbox'
-                        || $element['type'] === 'checkbox-multiple'
-                    ) {
+                // Do validation of form element
+                if (isset($element['validation'])) {
 
-                        $element['checked'] = false;
+                    $element['validation-pass'] = $element->Validate($element['validation'], $this);
+
+                    if ($element['validation-pass'] === false) {
+
+                        $values[$elementName] = [
+                            'value' => $element['value'],
+                            'validation-messages' => $element['validation-messages']
+                        ];
+                        $validates = false;
+
                     }
+                }
 
-                    // Do validation even when the form element is not set?
-                    // Duplicate code, revise this section and move outside
-                    // this if-statement?
-                    if (isset($element['validation'])) {
+                // Hmmm.... Why did I need this remember thing?
+                if (isset($element['remember'])
+                    && $element['remember']
+                ) {
+                    $values[$elementName] = ['value' => $element['value']];
+                    $remember = true;
+                }
 
-                        $element['validation-pass'] = $element->Validate($element['validation'], $this);
+                // Carry out the callback if the form element validates
+                // Hmmm, what if the element with the callback is not the last element?
+                if (isset($element['callback'])
+                    && $validates
+                ) {
 
-                        if ($element['validation-pass'] === false) {
+                    if (isset($element['callback-args'])) {
 
-                            $values[$element['name']] = [
-                                'value' => $element['value'], 'validation-messages' => $element['validation-messages']
-                            ];
-                            $validates = false;
-                        }
+                        $callbackStatus = call_user_func_array(
+                            $element['callback'],
+                            array_merge([$this]),
+                            $element['callback-args']
+                        );
+
+                    } else {
+
+                        $callbackStatus = call_user_func($element['callback'], $this);
+                    }
+                }
+
+            } else {
+
+                // The form element has no value set
+
+                // Set element to null, then we know it was not set.
+                //$element['value'] = null;
+                //echo $element['type'] . ':' . $elementName . ':' . $element['value'] . '<br>';
+
+                // If the element is a checkbox, clear its value of checked.
+                if ($element['type'] === 'checkbox'
+                    || $element['type'] === 'checkbox-multiple'
+                ) {
+
+                    $element['checked'] = false;
+                }
+
+                // Do validation even when the form element is not set?
+                // Duplicate code, revise this section and move outside
+                // this if-statement?
+                if (isset($element['validation'])) {
+
+                    $element['validation-pass'] = $element->Validate($element['validation'], $this);
+
+                    if ($element['validation-pass'] === false) {
+
+                        $values[$elementName] = [
+                            'value' => $element['value'], 'validation-messages' => $element['validation-messages']
+                        ];
+                        $validates = false;
                     }
                 }
             }
-        } elseif (isset($_SESSION['form-failed'])) {
-
-            // Read form data from session if the previous post failed during validation.
-            $this->InitElements($_SESSION['form-failed']);
-            unset($_SESSION['form-failed']);
-
-        } elseif (isset($_SESSION['form-remember'])) {
-
-            // Read form data from session if some form elements should be remembered
-            foreach ($_SESSION['form-remember'] as $key => $val) {
-                $this[$key]['value'] = $val['value'];
-            }
-            unset($_SESSION['form-remember']);
-
-        } elseif (isset($_SESSION['form-save'])) {
-
-            // Read form data from session,
-            // useful during test where the original form is displayed with its posted values
-            $this->InitElements($_SESSION['form-save']);
-            unset($_SESSION['form-save']);
         }
-
 
         // Prepare if data should be stored in the session during redirects
         // Did form validation or the callback fail?
@@ -601,21 +644,21 @@ EOD;
             || $callbackStatus === false
         ) {
 
-            $_SESSION['form-failed'] = $values;
+            $_SESSION[$this->session["failed"]] = $values;
 
         } elseif ($remember) {
 
             // Hmmm, why do I want to use this
-            $_SESSION['form-remember'] = $values;
+            $_SESSION[$this->session["remember"]] = $values;
         }
 
         if (isset($this->saveInSession) && $this->saveInSession) {
 
             // Remember all posted values
-            $_SESSION['form-save'] = $values;
+            $_SESSION[$this->session["save"]] = $values;
         }
 
-        // Lets se what the returnvalue should be
+        // Lets se what the return value should be
         $ret = $validates
             ? $callbackStatus
             : $validates;

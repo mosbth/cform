@@ -17,6 +17,6 @@ class CFormElementSearchWidget extends CFormElement
     public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
-        $this['type']     = 'search-widget';
+        $this['type'] = 'search-widget';
     }
 }

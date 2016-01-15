@@ -1,6 +1,6 @@
 <?php
 // Include CForm
-include("../../autoloader.php");
+include("../../../autoloader.php");
 
 
 
@@ -16,11 +16,12 @@ session_start();
 
 
 // Create the form
-$title = "CForm Example: Password matches, validate using 'match'";
+$title = "CForm Example: Multiple forms in one page";
 
-$form = new \Mos\HTMLForm\CFMValidateMatch();
+$form = new \Mos\HTMLForm\CFMCheckboxMultiple();
 $form->Check();
 
+var_dump($_SESSION);
 
 
 ?><!doctype html>

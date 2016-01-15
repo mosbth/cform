@@ -16,9 +16,9 @@ session_start();
 
 
 // Create the form
-$title = "CForm Example: Password matches, validate using 'match'";
+$title = "CForm Example: Form elements in HTML 5";
 
-$form = new \Mos\HTMLForm\CFMValidateMatch();
+$form = new \Mos\HTMLForm\CFMElementsHTML5();
 $form->Check();
 
 

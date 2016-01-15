@@ -420,36 +420,6 @@ EOD;
 </div>
 EOD;
 
-        } elseif ($this['type'] == 'checkbox-multiple') {
-
-            // custom for checkbox-multiple
-            $type = "type='checkbox'";
-            $name = " name='{$this['name']}[]'";
-            $ret = null;
-          
-            foreach ($this['values'] as $val) {
-                $id .= $val;
-                $item = $onlyValue  = htmlentities($val, ENT_QUOTES, $this->characterEncoding);
-                $value = " value='{$onlyValue}'";
-                $checked = is_array($this['checked']) && in_array($val, $this['checked'])
-                    ? " checked='checked'"
-                    : null;
-                $ret .= <<<EOD
-<p>
-<input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$checked}{$title} />
-<label for='$id'>$item</label>
-{$messages}
-</p>
-EOD;
-            }
-            return <<<EOD
-<div>
-<p>{$label}</p>
-{$ret}
-<p class='cf-desc'>{$description}</p>
-</div>
-EOD;
-
         } elseif ($this['type'] == 'file-multiple') {
 
             // file-multiple

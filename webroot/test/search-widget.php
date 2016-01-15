@@ -16,9 +16,9 @@ session_start();
 
 
 // Create the form
-$title = "CForm Example: Password matches, validate using 'match'";
+$title = "CForm Example: Search widget";
 
-$form = new \Mos\HTMLForm\CFMValidateMatch();
+$form = new \Mos\HTMLForm\CFMSearchWidget();
 $form->Check();
 
 

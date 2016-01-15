@@ -16,9 +16,12 @@ session_start();
 
 
 // Create the form
-$title = "CForm Example: Password matches, validate using 'match'";
+$title = "CForm Example: Validate various rules";
 
-$form = new \Mos\HTMLForm\CFMValidateMatch();
+$form = new \Mos\HTMLForm\CFMValidateVariousRules();
+
+$rules = $form->getActiveRules();
+$form->SetValidation("enter-a-value", $rules);
 $form->Check();
 
 

@@ -52,7 +52,7 @@ class CFormElementSelect extends CFormElement
 <p>
 <label for='$id'>$label</label>
 <br/>
-<select id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}{$multiple}>
+<select id='$id'{$class}{$name}{$autofocus}{$required}{$readonly}{$checked}{$title}>
 {$options}
 </select>
 {$messages}

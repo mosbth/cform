@@ -45,6 +45,11 @@ Todo
 History
 ----------------------------------
 
+v1.9.5 (2016-01-15)
+
+* Support several instances of cform on the same page, #23.
+
+
 v1.9.4 (2015-11-18)
 
 * Made $form->value("items") work for CFormElementCheckboxMultiple.

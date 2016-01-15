@@ -22,7 +22,8 @@ class CFormTest extends \PHPUnit_Framework_TestCase
 
         $res = $form->getHTML();
         $exp = <<<EOD
-\n<form method='post'>
+\n<form id='cform' method='post'>
+<input type="hidden" name="mos/cform-id" value="cform" />
 <fieldset>
 
 
@@ -51,7 +52,8 @@ EOD;
 
         $res = $form->getHTML();
         $exp = <<<EOD
-\n<form method='post' enctype='multipart/form-data'>
+\n<form id='cform' method='post' enctype='multipart/form-data'>
+<input type="hidden" name="mos/cform-id" value="cform" />
 <fieldset>
 
 
