@@ -48,6 +48,7 @@ History
 
 v1.9.5 (2016-01-15)
 
+* Do not remember password in session, #17.
 * Rewrote exampleprograms to use new CFormModel as baseclass.
 * Introduced CFormModel as baseclass for writing forms in classes.
 * Add badge for SensioLabs.
