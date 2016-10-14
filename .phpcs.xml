@@ -15,6 +15,11 @@
         <exclude name="Squiz.Commenting.FileComment" />
         <exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace" />
 
+        <!-- Below may be removed for a rougher check -->
+        <exclude name="Squiz.WhiteSpace.SuperfluousWhitespace" />
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen" />
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose" />
+
         <!--
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
         -->
