@@ -46,7 +46,7 @@ Todo
 History
 ----------------------------------
 
-v1.9.6 (2016-10-14)
+v1.9.7 (2016-10-14)
 
 * Add testcase to validation rule `custom_test` as `webroot/test/validate-custom.php`.
 
