@@ -46,6 +46,11 @@ Todo
 History
 ----------------------------------
 
+v1.9.6 (2016-10-14)
+
+* Add testcase to validation rule `custom_test` as `webroot/test/validate-custom.php`.
+
+
 v1.9.5 (2016-01-15)
 
 * Testfile displaying how HTML5 form elements are supported, #1.
