@@ -46,6 +46,11 @@ Todo
 History
 ----------------------------------
 
+v1.9.8 (2016-10-18)
+
+* Fix. Remove debug code in `CForm::value()`.
+
+
 v1.9.7 (2016-10-14)
 
 * Add testcase to validation rule `custom_test` as `webroot/test/validate-custom.php`.
